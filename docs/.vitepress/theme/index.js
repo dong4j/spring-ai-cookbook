@@ -21,6 +21,9 @@ import {inBrowser, useRoute} from 'vitepress'
 import mediumZoom from 'medium-zoom'
 import {NProgress} from "nprogress-v2/dist/index.js"; // 进度条组件
 import "nprogress-v2/dist/index.css"; // 进度条样式
+import {initComponent} from 'vitepress-plugin-legend/component'
+import 'vitepress-plugin-legend/dist/index.css'
+
 import './custom.css'
 
 export const Theme = {
@@ -51,6 +54,7 @@ export const Theme = {
     })
   },
   enhanceApp({app, router}) {
+    initComponent(app)
     app.use(NolebaseInlineLinkPreviewPlugin)
     app.use(NolebaseGitChangelogPlugin)
     // 切换路由进度条

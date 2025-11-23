@@ -7,6 +7,7 @@ import {GitChangelog, GitChangelogMarkdownSection,} from '@nolebase/vitepress-pl
 import {BiDirectionalLinks} from '@nolebase/markdown-it-bi-directional-links'
 import timeline from "vitepress-markdown-timeline";
 import {groupIconMdPlugin, groupIconVitePlugin} from 'vitepress-plugin-group-icons'
+import {vitepressPluginLegend} from 'vitepress-plugin-legend'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -200,20 +201,21 @@ export default defineConfig(
 
       vite: {
         plugins: [
-
-          groupIconVitePlugin({
-                                // 自定义图标: https://github.com/vscode-icons/vscode-icons/wiki/ListOfFiles
-                                customIcon: {
-                                  'java': 'vscode-icons:file-type-java',
-                                  'xml': 'vscode-icons:file-type-xml',
-                                  'maven': 'vscode-icons:file-type-maven',
-                                  'unplugin': 'https://unplugin.unjs.io/logo_light.svg',
-                                },
-                              }),
-          GitChangelog({
-                         // Fill in your repository URL here
-                         repoURL: () => 'https://github.com/dong4j/spring-ai-cookbook',
-                       }),
+          groupIconVitePlugin(
+              {
+                // 自定义图标: https://github.com/vscode-icons/vscode-icons/wiki/ListOfFiles
+                customIcon: {
+                  'java': 'vscode-icons:file-type-java',
+                  'xml': 'vscode-icons:file-type-xml',
+                  'maven': 'vscode-icons:file-type-maven',
+                  'unplugin': 'https://unplugin.unjs.io/logo_light.svg',
+                },
+              }),
+          GitChangelog(
+              {
+                // Fill in your repository URL here
+                repoURL: () => 'https://github.com/dong4j/spring-ai-cookbook',
+              }),
           GitChangelogMarkdownSection(),
         ],
         optimizeDeps: {
@@ -265,6 +267,10 @@ export default defineConfig(
           md.use(timeline)
           md.use(groupIconMdPlugin, {
             titleBar: {includeSnippet: true},
+          })
+          vitepressPluginLegend(md, {
+            markmap: {showToolbar: true}, // 显示脑图工具栏
+            mermaid: true // 启用 Mermaid
           })
         }
       },
