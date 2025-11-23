@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useData } from 'vitepress'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, nextTick } from 'vue'
+import { inBrowser } from 'vitepress'
 import { countWord } from '../utils/functions'
 
 const { page } = useData()
@@ -33,6 +34,54 @@ const readTime = computed(() => {
     return Math.ceil((wordTime.value + imageTime.value) / 60)
 })
 
+// 手动触发 busuanzi 数据加载
+function fetchBusuanzi() {
+  if (!inBrowser) return
+  
+  try {
+    const api = 'https://api.dong4j.site/busuanzi/api'
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', api, true)
+    
+    // 获取存储的 identity
+    const identity = localStorage.getItem('bsz-id')
+    if (identity) {
+      xhr.setRequestHeader('Authorization', 'Bearer ' + identity)
+    }
+    
+    xhr.setRequestHeader('x-bsz-referer', window.location.href)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        try {
+          const data = JSON.parse(xhr.responseText)
+          if (data.success && data.data) {
+            const pagePv = data.data.page_pv
+            if (pagePv !== undefined) {
+              const pvElement = document.getElementById('busuanzi_page_pv')
+              if (pvElement) {
+                pvElement.textContent = pagePv.toString()
+              }
+            }
+            
+            // 保存 identity
+            const newIdentity = xhr.getResponseHeader('Set-Bsz-Identity')
+            if (newIdentity && newIdentity !== '') {
+              localStorage.setItem('bsz-id', newIdentity)
+            }
+          }
+        } catch (error) {
+          console.warn('Error parsing busuanzi response:', error)
+        }
+      }
+    }
+    
+    xhr.send()
+  } catch (error) {
+    console.warn('Error fetching busuanzi:', error)
+  }
+}
 
 function analyze() {
     document.querySelectorAll('.meta-des').forEach(v => v.remove())
@@ -46,8 +95,29 @@ function analyze() {
 }
 
 onMounted(() => {
+    if (!inBrowser) return
+    
     // 初始化时执行一次
     analyze()
+    
+    // 等待 DOM 渲染完成后，检查并加载 busuanzi 数据
+    nextTick(() => {
+      const pvElement = document.getElementById('busuanzi_page_pv')
+      if (pvElement) {
+        // 如果元素存在但内容是默认值，则手动触发加载
+        if (pvElement.textContent === '--' || !pvElement.textContent || pvElement.textContent.trim() === '') {
+          // 延迟执行，确保页面完全加载
+          setTimeout(() => {
+            fetchBusuanzi()
+          }, 500)
+        }
+      } else {
+        // 如果元素不存在，延迟重试
+        setTimeout(() => {
+          fetchBusuanzi()
+        }, 1000)
+      }
+    })
 })
 </script>
 
@@ -81,6 +151,16 @@ onMounted(() => {
             </svg>
             <span class="meta-label">时长:</span>
             <span class="meta-value">{{ readTime }} 分钟</span>
+        </div>
+        <span class="meta-separator">·</span>
+        <div class="meta-item">
+            <svg class="meta-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="meta-label">阅读:</span>
+            <span class="meta-value" id="busuanzi_page_pv">--</span>
+            <span class="meta-unit">次</span>
         </div>
     </div>
 </template>
@@ -120,6 +200,11 @@ onMounted(() => {
 
 .meta-value {
   color: var(--vp-c-text-1);
+}
+
+.meta-unit {
+  color: var(--vp-c-text-3);
+  font-size: 13px;
 }
 
 .meta-separator {

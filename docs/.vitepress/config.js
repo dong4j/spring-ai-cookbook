@@ -254,7 +254,15 @@ export default defineConfig(
       ],
 
       head: [
-        ['link', {rel: 'icon', href: '/favicon.ico'}]
+        ['link', {rel: 'icon', href: '/favicon.ico'}],
+        ['script', {
+          src: 'https://cdn.dong4j.site/source/static/busuanzi.self.js',
+          async: true,
+          'data-api': 'https://api.dong4j.site/busuanzi/api',
+          'data-prefix': 'busuanzi',
+          'data-style': 'default',
+          'data-pjax': 'true'
+        }]
       ],
 
       // markdown配置

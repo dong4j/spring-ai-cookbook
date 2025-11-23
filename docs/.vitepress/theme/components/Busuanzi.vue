@@ -3,14 +3,14 @@
     <span class="busuanzi-item">
       <span class="busuanzi-emoji">👥</span>
       <span class="busuanzi-label">本站访客数</span>
-      <span class="busuanzi-value" id="busuanzi_value_site_uv">--</span>
+      <span class="busuanzi-value" id="busuanzi_site_uv">--</span>
       <span class="busuanzi-unit">人次</span>
     </span>
     <span class="busuanzi-separator">·</span>
     <span class="busuanzi-item">
       <span class="busuanzi-emoji">👀</span>
       <span class="busuanzi-label">本站总访问量</span>
-      <span class="busuanzi-value" id="busuanzi_value_site_pv">--</span>
+      <span class="busuanzi-value" id="busuanzi_site_pv">--</span>
       <span class="busuanzi-unit">次</span>
     </span>
   </div>
