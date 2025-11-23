@@ -27,6 +27,8 @@ import 'vitepress-plugin-legend/dist/index.css'
 import ArticleMetadata from "./components/ArticleMetadata.vue"
 import BackToTop from "./components/BackToTop.vue"
 
+import busuanzi from 'busuanzi.pure.js'
+import bsz from "./components/Busuanzi.vue";
 import giscusTalk from 'vitepress-plugin-comment-with-giscus';
 
 import './custom.css'
@@ -78,8 +80,11 @@ export const Theme = {
       'layout-top': () => [
         h(NolebaseHighlightTargetedHeading),
       ],
-      // Back to top button
-      'layout-bottom': () => h(BackToTop),
+      // Back to top button and busuanzi
+      'layout-bottom': () => [
+        h(BackToTop),
+        h(bsz),
+      ],
     })
   },
   enhanceApp({app, router}) {
@@ -95,6 +100,7 @@ export const Theme = {
       };
       router.onAfterRouteChange = () => {
         NProgress.done(); // 停止进度条
+        busuanzi.fetch();
       };
     }
   },
