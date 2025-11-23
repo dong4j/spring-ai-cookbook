@@ -1,0 +1,14 @@
+/**
+ * 自定义样式
+ */
+
+:root {
+    --vp-c-brand: #646cff;
+    --vp-c-brand-light: #747bff;
+    --vp-c-brand-lighter: #9499ff;
+    --vp-c-brand-dark: #535bf2;
+    --vp-c-brand-darker: #454ce1;
+}
+
+/* 自定义样式可以在这里添加 */
+

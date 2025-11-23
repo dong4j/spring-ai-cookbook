@@ -1,0 +1,16 @@
+{
+  "name": "spring-ai-cookbook",
+  "version": "0.0.1-SNAPSHOT",
+  "description": "Spring AI Cookbook Documentation",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "sync": "bash sync-docs.sh"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}
+
