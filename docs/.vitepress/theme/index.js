@@ -66,7 +66,6 @@ export const Theme = {
     // 切换路由进度条
     if (inBrowser) {
       NProgress.configure({showSpinner: false});
-
       router.onBeforeRouteChange = () => {
         NProgress.start(); // 开始进度条
       };
