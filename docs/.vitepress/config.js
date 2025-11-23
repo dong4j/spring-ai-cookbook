@@ -190,61 +190,91 @@ function generateSidebar() {
   return sidebar
 }
 
-export default defineConfig({
-                              title: 'Spring AI Cookbook',
-                              description: 'Spring AI 教程文档',
-                              base: '/',
-                              lang: 'zh-CN',
+export default defineConfig(
+    {
+      vite: {
+        optimizeDeps: {
+          exclude: [
+            '@nolebase/vitepress-plugin-enhanced-readabilities/client',
+            'vitepress',
+            '@nolebase/ui',
+          ],
+        },
+        ssr: {
+          noExternal: [
+            // If there are other packages that need to be processed by Vite, you can add them here.
+            '@nolebase/vitepress-plugin-enhanced-readabilities',
+            '@nolebase/ui',
+          ],
+        },
+      },
+      title: 'Spring AI Cookbook',
+      description: 'Spring AI 教程文档',
+      base: '/',
+      lang: 'zh-CN',
 
-                              // 域名配置
-                              // 如果部署到子路径，修改 base 为 '/spring-ai-cookbook/'
-                              // 当前配置为根域名 springai.dong4j.site
+      // 域名配置
+      // 如果部署到子路径，修改 base 为 '/spring-ai-cookbook/'
+      // 当前配置为根域名 springai.dong4j.site
 
-                              // 忽略死链接检查（用于开发环境的 localhost 链接等）
-                              ignoreDeadLinks: [
-                                /^http:\/\/localhost/,
-                                /^https:\/\/localhost/
-                              ],
+      // 忽略死链接检查（用于开发环境的 localhost 链接等）
+      ignoreDeadLinks: [
+        /^http:\/\/localhost/,
+        /^https:\/\/localhost/
+      ],
 
-                              head: [
-                                ['link', {rel: 'icon', href: '/favicon.ico'}]
-                              ],
+      head: [
+        ['link', {rel: 'icon', href: '/favicon.ico'}]
+      ],
 
-                              themeConfig: {
-                                siteTitle: 'Spring AI Cookbook',
-                                logo: '/logo.png',
+      // markdown配置
+      markdown: {
+        image: {
+          // 开启图片懒加载
+          lazyLoading: true
+        },
+      },
 
-                                nav: [
-                                  {text: '首页', link: '/'},
-                                  {text: '开始', link: '/1.spring-ai-started/'}
-                                ],
+      themeConfig: {
+        siteTitle: 'Spring AI Cookbook',
+        logo: '/logo.png',
 
-                                sidebar: generateSidebar(),
+        nav: [
+          {text: '首页', link: '/'},
+          {text: '开始', link: '/1.spring-ai-started/'}
+        ],
 
-                                socialLinks: [
-                                  {icon: 'github', link: 'https://github.com/dong4j/spring-ai-cookbook'}
-                                ],
+        sidebar: generateSidebar(),
 
-                                footer: {
-                                  message: '基于 Spring AI 构建',
-                                  copyright: 'Copyright © 2025 Spring AI Cookbook'
-                                },
+        socialLinks: [
+          {icon: 'github', link: 'https://github.com/dong4j/spring-ai-cookbook'}
+        ],
 
-                                search: {
-                                  provider: 'local'
-                                },
+        footer: {
+          message: '基于 Spring AI 构建',
+          copyright: 'Copyright © 2025 Spring AI Cookbook'
+        },
 
-                                editLink: {
-                                  pattern: 'https://github.com/dong4j/spring-ai-cookbook/edit/main/docs/:path',
-                                  text: '在 GitHub 上编辑此页'
-                                },
+        search: {
+          provider: 'local'
+        },
 
-                                lastUpdated: {
-                                  text: '最后更新于',
-                                  formatOptions: {
-                                    dateStyle: 'short',
-                                    timeStyle: 'medium'
-                                  }
-                                }
-                              }
-                            })
+        editLink: {
+          pattern: 'https://github.com/dong4j/spring-ai-cookbook/edit/main/docs/:path',
+          text: '在 GitHub 上编辑此页'
+        },
+
+        lastUpdated: {
+          text: '最后更新于',
+          formatOptions: {
+            dateStyle: 'short',
+            timeStyle: 'medium'
+          }
+        },
+
+        outline: {
+          level: [2, 4],
+          label: '页面大纲'
+        }
+      }
+    })

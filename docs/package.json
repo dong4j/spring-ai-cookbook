@@ -10,7 +10,8 @@
     "sync": "bash sync-docs.sh"
   },
   "devDependencies": {
+    "@nolebase/vitepress-plugin-enhanced-readabilities": "^2.18.2",
+    "@nolebase/vitepress-plugin-index": "^2.18.2",
     "vitepress": "^1.6.3"
   }
 }
-

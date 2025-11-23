@@ -18,6 +18,12 @@
 }
 
 
+/* 右侧大纲容器宽度 */
+.aside-container {
+    width: 400px !important;
+}
+
+
 /* Hero 区域动画 */
 .VPHero .name {
     background: linear-gradient(120deg, #646cff 30%, #747bff, #9499ff);
