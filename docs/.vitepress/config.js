@@ -231,6 +231,8 @@ export default defineConfig(
             '@nolebase/vitepress-plugin-enhanced-readabilities',
             '@nolebase/ui',
             '@nolebase/vitepress-plugin-highlight-targeted-heading',
+            '@nolebase/vitepress-plugin-inline-link-preview',
+            '@nolebase/vitepress-plugin-git-changelog',
           ],
         },
       },
