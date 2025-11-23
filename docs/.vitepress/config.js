@@ -272,6 +272,13 @@ export default defineConfig(
             markmap: {showToolbar: true}, // 显示脑图工具栏
             mermaid: true // 启用 Mermaid
           })
+          md.renderer.rules.heading_close = (tokens, idx, options, env, slf) => {
+            let htmlResult = slf.renderToken(tokens, idx, options);
+            if (tokens[idx].tag === 'h1') {
+              htmlResult += `<ArticleMetadata />`;
+            }
+            return htmlResult;
+          }
         }
       },
 

@@ -24,6 +24,8 @@ import "nprogress-v2/dist/index.css"; // 进度条样式
 import {initComponent} from 'vitepress-plugin-legend/component'
 import 'vitepress-plugin-legend/dist/index.css'
 
+import ArticleMetadata from "./components/ArticleMetadata.vue"
+
 import './custom.css'
 
 export const Theme = {
@@ -54,6 +56,7 @@ export const Theme = {
     })
   },
   enhanceApp({app, router}) {
+    app.component('ArticleMetadata', ArticleMetadata)
     initComponent(app)
     app.use(NolebaseInlineLinkPreviewPlugin)
     app.use(NolebaseGitChangelogPlugin)
