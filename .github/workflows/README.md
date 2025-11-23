@@ -75,67 +75,76 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 
 **自动触发（条件触发）**：
 
-如果启用了自动触发（`push` 已取消注释），workflow 的触发和执行分为两个阶段：
+如果启用了自动触发（`push` 已取消注释），workflow 的触发和执行需要**同时满足**以下条件：
 
-### 触发阶段（workflow 会被触发，但可能不执行）
+### 触发和执行条件（必须同时满足）
 
-以下条件满足时，workflow 会被触发：
+1. **推送到 `main` 或 `master` 分支**
+2. **变更的文件匹配以下之一**：
+    - `**/README.md` - 任意位置的 README.md 文件（包括项目根目录和所有子模块）
+    - `.github/workflows/deploy-docs.yml` - workflow 配置文件本身
+3. **提交信息中包含 `[deploy-docs]` 关键词**
 
-- 推送到 `main` 或 `master` 分支
-- **任意文件变更**都会触发（不限制文件路径）
-
-### 执行阶段（workflow 真正执行部署）
-
-即使 workflow 被触发了，还需要满足以下条件才会**真正执行部署**：
-
-- **提交信息中包含 `[deploy-docs]` 关键词**
+**重要**：只有**同时满足**以上三个条件，workflow 才会被触发并执行部署。其他情况都会被忽略。
 
 ### 完整流程示例
 
 ```bash
-# 场景 1：修改了 docs/index.md，提交信息包含 [deploy-docs]
-# ✅ workflow 会被触发 ✅ 会执行部署
-git add docs/index.md
-git commit -m "更新首页 [deploy-docs]"
+# 场景 1：修改了项目根目录的 README.md，提交信息包含 [deploy-docs]
+# ✅ 满足所有条件 ✅ 会触发并执行部署
+git add README.md
+git commit -m "更新项目说明 [deploy-docs]"
 git push origin main
 
-# 场景 2：修改了 docs/index.md，提交信息不包含 [deploy-docs]
-# ✅ workflow 会被触发 ❌ 但不会执行部署（会被跳过）
-git add docs/index.md
-git commit -m "更新首页"
+# 场景 2：修改了子模块的 README.md，提交信息包含 [deploy-docs]
+# ✅ 满足所有条件 ✅ 会触发并执行部署
+git add 1.spring-ai-started/README.md
+git commit -m "更新模块文档 [deploy-docs]"
 git push origin main
 
-# 场景 3：只修改了代码文件（不在 docs/ 目录下），但提交信息包含 [deploy-docs]
-# ✅ workflow 会被触发 ✅ 会执行部署（因为任意文件变更都会触发）
+# 场景 3：修改了 workflow 配置文件，提交信息包含 [deploy-docs]
+# ✅ 满足所有条件 ✅ 会触发并执行部署
+git add .github/workflows/deploy-docs.yml
+git commit -m "更新部署配置 [deploy-docs]"
+git push origin main
+
+# 场景 4：修改了 README.md，但提交信息不包含 [deploy-docs]
+# ❌ 不满足条件 ❌ 不会触发（会被忽略）
+git add README.md
+git commit -m "更新项目说明"
+git push origin main
+
+# 场景 5：只修改了代码文件（没有 README.md 或配置文件变更）
+# ❌ 不满足条件 ❌ 不会触发（会被忽略）
 git add src/main/java/App.java
 git commit -m "修复bug [deploy-docs]"
 git push origin main
 
-# 场景 4：修改了代码文件，但提交信息不包含 [deploy-docs]
-# ✅ workflow 会被触发 ❌ 但不会执行部署（会被跳过）
-git add src/main/java/App.java
-git commit -m "修复bug"
+# 场景 6：修改了其他文档文件（不是 README.md）
+# ❌ 不满足条件 ❌ 不会触发（会被忽略）
+git add docs/index.md
+git commit -m "更新首页 [deploy-docs]"
 git push origin main
 ```
 
 **触发示例**：
 
 ```bash
-# ✅ 会触发部署
-git commit -m "更新文档内容 [deploy-docs]"
+# ✅ 会触发并执行部署（同时满足：README.md 变更 + 提交信息包含 [deploy-docs]）
+git commit -m "更新 README [deploy-docs]"
 git commit -m "[deploy-docs] 修复文档错误"
-git commit -m "docs: 更新 README [deploy-docs]"
+git commit -m "docs: 更新 README.md [deploy-docs]"
 
-# ❌ 不会触发部署（缺少 [deploy-docs]）
-git commit -m "更新文档内容"
-git commit -m "修复代码bug"
+# ❌ 不会触发（缺少 [deploy-docs] 或不是 README.md/配置文件变更）
+git commit -m "更新 README"  # 缺少 [deploy-docs]
+git commit -m "修复代码bug [deploy-docs]"  # 不是 README.md 或配置文件变更
 ```
 
-**工作原理**：
+**工作原理总结**：
 
-- 如果提交信息中**包含** `[deploy-docs]`，workflow 会执行部署
-- 如果提交信息中**不包含** `[deploy-docs]`，即使 `docs/` 目录有变更，workflow 也不会执行
-- 手动触发（workflow_dispatch）不受此限制，随时可以执行
+- ✅ **会触发并执行**：修改了 README.md 或 workflow 配置文件 + 提交信息包含 `[deploy-docs]`
+- ❌ **会被忽略**：其他所有情况（包括修改了 README.md 但提交信息不包含 `[deploy-docs]`，或修改了其他文件）
+- 🔧 **手动触发**：不受以上限制，随时可以通过 GitHub Actions 页面手动触发
 
 ### 构建步骤
 
@@ -223,4 +232,5 @@ git commit -m "修复代码bug"
 - 如果使用 Let's Encrypt，证书路径可能不同
 - 根据实际情况调整 `root` 路径：`/var/www/spring-ai-cookbook/dist`
 - 如果安装了 Brotli 模块，可以取消注释 Brotli 压缩配置
+
 

@@ -14,7 +14,11 @@ on:
     branches:
       - main
       - master
-    # 注意：任意文件变更都会触发 workflow，但只有提交信息包含 [deploy-docs] 才会真正执行部署
+    # paths 过滤：监控任意位置的 README.md 文件变动
+    # 注意：即使触发了 workflow，还需要提交信息包含 [deploy-docs] 才会真正执行部署
+    paths:
+      - '**/README.md'                    # 任意位置的 README.md 文件
+      - '.github/workflows/deploy-docs.yml' # workflow 文件本身变更
 
 jobs:
   build-and-deploy:
