@@ -79,12 +79,10 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 
 ### 触发阶段（workflow 会被触发，但可能不执行）
 
-以下条件**任意满足**时，workflow 会被触发：
+以下条件满足时，workflow 会被触发：
 
-1. 推送到 `main` 或 `master` 分支
-2. **并且** 变更的文件路径匹配以下之一：
-    - `docs/**` - docs 目录下的任何文件
-    - `.github/workflows/deploy-docs.yml` - workflow 文件本身
+- 推送到 `main` 或 `master` 分支
+- **任意文件变更**都会触发（不限制文件路径）
 
 ### 执行阶段（workflow 真正执行部署）
 
@@ -107,10 +105,16 @@ git add docs/index.md
 git commit -m "更新首页"
 git push origin main
 
-# 场景 3：只修改了代码文件（不在 docs/ 目录下）
-# ❌ workflow 不会被触发
+# 场景 3：只修改了代码文件（不在 docs/ 目录下），但提交信息包含 [deploy-docs]
+# ✅ workflow 会被触发 ✅ 会执行部署（因为任意文件变更都会触发）
 git add src/main/java/App.java
 git commit -m "修复bug [deploy-docs]"
+git push origin main
+
+# 场景 4：修改了代码文件，但提交信息不包含 [deploy-docs]
+# ✅ workflow 会被触发 ❌ 但不会执行部署（会被跳过）
+git add src/main/java/App.java
+git commit -m "修复bug"
 git push origin main
 ```
 

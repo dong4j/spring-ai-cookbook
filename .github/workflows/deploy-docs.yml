@@ -14,12 +14,7 @@ on:
     branches:
       - main
       - master
-    # paths 过滤：只有这些路径的文件变更才会触发 workflow
-    # 注意：即使触发了 workflow，还需要提交信息包含 [deploy-docs] 才会真正执行部署
-    paths:
-      - 'docs/**'                          # docs 目录下的任何文件变更
-      - '.github/workflows/deploy-docs.yml' # workflow 文件本身变更
-  # 注意：自动触发时，需要在提交信息中包含 [deploy-docs] 才会执行部署
+    # 注意：任意文件变更都会触发 workflow，但只有提交信息包含 [deploy-docs] 才会真正执行部署
 
 jobs:
   build-and-deploy:
