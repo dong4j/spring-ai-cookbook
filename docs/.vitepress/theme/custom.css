@@ -185,6 +185,11 @@ a:hover {
     display: none !important;
 }
 
+/* 调整 content 的 padding */
+.content {
+    padding: 0 32px 32px !important;
+}
+
 /* 响应式优化 */
 @media (max-width: 768px) {
     .VPHero .name {

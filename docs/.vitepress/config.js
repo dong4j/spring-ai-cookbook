@@ -2,6 +2,7 @@ import {defineConfig} from 'vitepress'
 import fs from 'fs'
 import path from 'path'
 import {fileURLToPath} from 'url'
+import dayjs from 'dayjs'
 import {InlineLinkPreviewElementTransform} from '@nolebase/vitepress-plugin-inline-link-preview/markdown-it'
 import {GitChangelog, GitChangelogMarkdownSection,} from '@nolebase/vitepress-plugin-git-changelog/vite'
 import {BiDirectionalLinks} from '@nolebase/markdown-it-bi-directional-links'
@@ -340,8 +341,13 @@ export default defineConfig(
         lastUpdated: {
           text: '最后更新于',
           formatOptions: {
+            forceLocale: true, // 保持默认 locale 处理（可选）
             dateStyle: 'short',
             timeStyle: 'medium'
+          },
+          transform: (timestamp) => {
+            // timestamp: number | undefined
+            return dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')
           }
         },
 
