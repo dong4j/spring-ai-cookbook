@@ -80,9 +80,9 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 ### 触发和执行条件（必须同时满足）
 
 1. **推送到 `main` 或 `master` 分支**
-2. **变更的文件匹配以下之一**：
+2. **变更的文件是任意位置的 README.md**：
     - `**/README.md` - 任意位置的 README.md 文件（包括项目根目录和所有子模块）
-    - `.github/workflows/deploy-docs.yml` - workflow 配置文件本身
+    - **注意**：修改 workflow 配置文件本身不会触发部署
 3. **提交信息中包含 `[deploy-docs]` 关键词**
 
 **重要**：只有**同时满足**以上三个条件，workflow 才会被触发并执行部署。其他情况都会被忽略。
@@ -103,7 +103,7 @@ git commit -m "更新模块文档 [deploy-docs]"
 git push origin main
 
 # 场景 3：修改了 workflow 配置文件，提交信息包含 [deploy-docs]
-# ✅ 满足所有条件 ✅ 会触发并执行部署
+# ❌ 不满足条件 ❌ 不会触发（因为只监控 README.md 文件）
 git add .github/workflows/deploy-docs.yml
 git commit -m "更新部署配置 [deploy-docs]"
 git push origin main
@@ -142,8 +142,11 @@ git commit -m "修复代码bug [deploy-docs]"  # 不是 README.md 或配置文�
 
 **工作原理总结**：
 
-- ✅ **会触发并执行**：修改了 README.md 或 workflow 配置文件 + 提交信息包含 `[deploy-docs]`
-- ❌ **会被忽略**：其他所有情况（包括修改了 README.md 但提交信息不包含 `[deploy-docs]`，或修改了其他文件）
+- ✅ **会触发并执行**：修改了 README.md 文件 + 提交信息包含 `[deploy-docs]`
+- ❌ **会被忽略**：其他所有情况，包括：
+    - 修改了 README.md 但提交信息不包含 `[deploy-docs]`
+    - 修改了 workflow 配置文件（即使提交信息包含 `[deploy-docs]`）
+    - 修改了其他文件
 - 🔧 **手动触发**：不受以上限制，随时可以通过 GitHub Actions 页面手动触发
 
 ### 构建步骤
