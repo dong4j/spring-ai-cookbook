@@ -75,11 +75,44 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 
 **自动触发（条件触发）**：
 
-如果启用了自动触发（`push` 已取消注释），workflow 会在以下条件**同时满足**时执行：
+如果启用了自动触发（`push` 已取消注释），workflow 的触发和执行分为两个阶段：
+
+### 触发阶段（workflow 会被触发，但可能不执行）
+
+以下条件**任意满足**时，workflow 会被触发：
 
 1. 推送到 `main` 或 `master` 分支
-2. `docs/` 目录或 workflow 文件有变更
-3. **提交信息中包含 `[deploy-docs]` 关键词**
+2. **并且** 变更的文件路径匹配以下之一：
+    - `docs/**` - docs 目录下的任何文件
+    - `.github/workflows/deploy-docs.yml` - workflow 文件本身
+
+### 执行阶段（workflow 真正执行部署）
+
+即使 workflow 被触发了，还需要满足以下条件才会**真正执行部署**：
+
+- **提交信息中包含 `[deploy-docs]` 关键词**
+
+### 完整流程示例
+
+```bash
+# 场景 1：修改了 docs/index.md，提交信息包含 [deploy-docs]
+# ✅ workflow 会被触发 ✅ 会执行部署
+git add docs/index.md
+git commit -m "更新首页 [deploy-docs]"
+git push origin main
+
+# 场景 2：修改了 docs/index.md，提交信息不包含 [deploy-docs]
+# ✅ workflow 会被触发 ❌ 但不会执行部署（会被跳过）
+git add docs/index.md
+git commit -m "更新首页"
+git push origin main
+
+# 场景 3：只修改了代码文件（不在 docs/ 目录下）
+# ❌ workflow 不会被触发
+git add src/main/java/App.java
+git commit -m "修复bug [deploy-docs]"
+git push origin main
+```
 
 **触发示例**：
 

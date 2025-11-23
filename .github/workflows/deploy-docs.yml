@@ -14,9 +14,11 @@ on:
     branches:
       - main
       - master
+    # paths 过滤：只有这些路径的文件变更才会触发 workflow
+    # 注意：即使触发了 workflow，还需要提交信息包含 [deploy-docs] 才会真正执行部署
     paths:
-      - 'docs/**'
-      - '.github/workflows/deploy-docs.yml'
+      - 'docs/**'                          # docs 目录下的任何文件变更
+      - '.github/workflows/deploy-docs.yml' # workflow 文件本身变更
   # 注意：自动触发时，需要在提交信息中包含 [deploy-docs] 才会执行部署
 
 jobs:
@@ -24,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     
     # 如果是 push 触发，检查提交信息是否包含 [deploy-docs]
+    # 注意：如果要修改触发关键词，只需要修改下面 '[deploy-docs]' 这个字符串即可
     if: |
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-docs]'))
