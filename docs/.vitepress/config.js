@@ -107,6 +107,11 @@ function categorizeModules(modules) {
 
     const num = parseInt(moduleNum)
 
+    // 跳过 num === 0 的模块（0.spring-ai-introduction），因为它会单独处理
+    if (num === 0) {
+      continue
+    }
+
     let category = '其他'
     if (num <= 2) {
       category = '入门'
@@ -130,6 +135,23 @@ function categorizeModules(modules) {
 }
 
 /**
+ * 获取 0.spring-ai-introduction 模块信息
+ */
+function getIntroductionModule() {
+  const introPath = path.join(docsDir, '0.spring-ai-introduction')
+  const indexPath = path.join(introPath, 'index.md')
+
+  if (fs.existsSync(indexPath)) {
+    const displayName = getModuleDisplayName(introPath)
+    return {
+      text: displayName,
+      link: '/0.spring-ai-introduction/'
+    }
+  }
+  return null
+}
+
+/**
  * 生成侧边栏配置
  */
 function generateSidebar() {
@@ -140,9 +162,23 @@ function generateSidebar() {
     '/': []
   }
 
-  const categoryOrder = ['入门', '核心功能', 'Model API', '高级功能', '部署与测试']
+  const categoryOrder = ['简介', '入门', '核心功能', 'Model API', '高级功能', '部署与测试']
 
+  // 单独处理"简介"分类
+  const introModule = getIntroductionModule()
+  if (introModule) {
+    sidebar['/'].push({
+                        text: '简介',
+                        items: [introModule]
+                      })
+  }
+
+  // 处理其他分类（排除"简介"，因为已经单独处理了）
   for (const category of categoryOrder) {
+    if (category === '简介') {
+      continue
+    }
+
     if (categorized[category] && categorized[category].length > 0) {
       sidebar['/'].push({
                           text: category,
@@ -193,7 +229,7 @@ export default defineConfig({
                                 },
 
                                 editLink: {
-                                  pattern: 'https://github.com/your-repo/edit/main/docs/:path',
+                                  pattern: 'https://github.com/dong4j/spring-ai-cookbook/edit/main/docs/:path',
                                   text: '在 GitHub 上编辑此页'
                                 },
 

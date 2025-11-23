@@ -17,6 +17,7 @@
     --vp-home-hero-image-filter: drop-shadow(0 12px 40px rgba(100, 108, 255, 0.2));
 }
 
+
 /* Hero 区域动画 */
 .VPHero .name {
     background: linear-gradient(120deg, #646cff 30%, #747bff, #9499ff);
@@ -52,14 +53,26 @@
     }
 }
 
-/* 按钮悬停效果 */
+/* 按钮悬停效果 - 已禁用 */
 .VPHero .action {
-    transition: all 0.3s ease;
+    transition: none;
 }
 
 .VPHero .action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(100, 108, 255, 0.3);
+    transform: none;
+    box-shadow: none;
+}
+
+/* GitHub 按钮绿色样式 */
+.VPHero .action[href*="github"] {
+    background: #28a745 !important;
+    border-color: #28a745 !important;
+    color: #fff !important;
+}
+
+.VPHero .action[href*="github"]:hover {
+    background: #218838 !important;
+    border-color: #1e7e34 !important;
 }
 
 /* Features 卡片动画 */

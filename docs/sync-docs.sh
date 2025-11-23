@@ -36,38 +36,38 @@ process_module() {
     local module_dir="$1"
     local relative_path="${module_dir#${ROOT_DIR}/}"
     local readme_file="${module_dir}/README.md"
-    
+
     # 跳过 docs 目录本身和隐藏目录
     if [[ "${relative_path}" == "docs"* ]] || [[ "${relative_path}" == .* ]]; then
         return
     fi
-    
+
     # 检查是否是模块目录（包含数字开头的目录名）
     local dir_name=$(basename "${module_dir}")
     if [[ ! "${dir_name}" =~ ^[0-9] ]]; then
         return
     fi
-    
+
     # 如果存在 README.md
     if [[ -f "${readme_file}" ]]; then
         # 计算目标路径
         # 将相对路径转换为 docs 目录下的路径
         local target_dir="${DOCS_DIR}/${relative_path}"
         local target_file="${target_dir}/index.md"
-        
+
         # 创建目标目录
         mkdir -p "${target_dir}"
-        
+
         # 复制 README.md 到 index.md
         cp "${readme_file}" "${target_file}"
-        
+
         echo -e "${GREEN}✓${NC} ${relative_path}/README.md -> docs/${relative_path}/index.md"
         ((SYNCED_COUNT++))
-        
+
         # 同步 imgs 目录（完全同步，包括删除）
         local imgs_dir="${module_dir}/imgs"
         local target_imgs_dir="${target_dir}/imgs"
-        
+
         if [[ -d "${imgs_dir}" ]]; then
             # 使用 rsync 或 cp -r 复制目录
             if command -v rsync &> /dev/null; then
@@ -80,7 +80,7 @@ process_module() {
                 fi
                 cp -r "${imgs_dir}" "${target_dir}/"
             fi
-            
+
             # 统计图片数量
             local img_count=$(find "${imgs_dir}" -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.svg" \) 2>/dev/null | wc -l | tr -d ' ')
             if [[ ${img_count} -gt 0 ]]; then
@@ -103,37 +103,38 @@ process_module() {
 # 函数：递归查找所有模块目录
 find_modules() {
     local dir="$1"
-    
+
     # 检查目录是否存在
     if [[ ! -d "${dir}" ]]; then
         return
     fi
-    
+
     # 遍历当前目录
     for item in "${dir}"/*; do
         # 检查文件是否存在（处理通配符扩展失败的情况）
         if [[ ! -e "${item}" ]]; then
             continue
         fi
-        
+
         if [[ -d "${item}" ]]; then
             local dir_name=$(basename "${item}")
-            
+
             # 跳过隐藏目录和特殊目录
             if [[ "${dir_name}" == .* ]] || \
                [[ "${dir_name}" == "docs" ]] || \
                [[ "${dir_name}" == "node_modules" ]] || \
                [[ "${dir_name}" == "target" ]] || \
                [[ "${dir_name}" == ".git" ]] || \
-               [[ "${dir_name}" == "src" ]]; then
+               [[ "${dir_name}" == "src" ]] || \
+               [[ "${dir_name}" == "0.spring-ai-introduction" ]]; then
                 continue
             fi
-            
+
             # 如果是模块目录（以数字开头），处理它
             if [[ "${dir_name}" =~ ^[0-9] ]]; then
                 process_module "${item}"
             fi
-            
+
             # 递归处理子目录（支持多层级）
             find_modules "${item}"
         fi
@@ -144,29 +145,30 @@ find_modules() {
 cleanup_orphaned_modules() {
     echo -e "${YELLOW}正在清理已删除的模块...${NC}"
     local deleted_count=0
-    
+
     # 遍历 docs 目录下的所有目录
     if [[ -d "${DOCS_DIR}" ]]; then
         for item in "${DOCS_DIR}"/*; do
             if [[ ! -e "${item}" ]]; then
                 continue
             fi
-            
+
             if [[ -d "${item}" ]]; then
                 local dir_name=$(basename "${item}")
-                
+
                 # 跳过隐藏目录和特殊目录
                 if [[ "${dir_name}" == .* ]] || \
                    [[ "${dir_name}" == "node_modules" ]] || \
-                   [[ "${dir_name}" == ".vitepress" ]]; then
+                   [[ "${dir_name}" == ".vitepress" ]] || \
+                   [[ "${dir_name}" == "0.spring-ai-introduction" ]]; then
                     continue
                 fi
-                
+
                 # 检查是否是模块目录（以数字开头）
                 if [[ "${dir_name}" =~ ^[0-9] ]]; then
                     local relative_path="${dir_name}"
                     local source_module="${ROOT_DIR}/${relative_path}"
-                    
+
                     # 如果源模块不存在，删除 docs 中的对应目录
                     if [[ ! -d "${source_module}" ]]; then
                         rm -rf "${item}"
@@ -180,7 +182,7 @@ cleanup_orphaned_modules() {
             fi
         done
     fi
-    
+
     if [[ ${deleted_count} -gt 0 ]]; then
         echo -e "已清理: ${RED}${deleted_count}${NC} 个不存在的模块"
     fi
@@ -190,29 +192,29 @@ cleanup_orphaned_modules() {
 cleanup_submodules() {
     local docs_subdir="$1"
     local relative_path="$2"
-    
+
     if [[ ! -d "${docs_subdir}" ]]; then
         return
     fi
-    
+
     for item in "${docs_subdir}"/*; do
         if [[ ! -e "${item}" ]]; then
             continue
         fi
-        
+
         if [[ -d "${item}" ]]; then
             local dir_name=$(basename "${item}")
-            
+
             # 跳过 imgs 等特殊目录
             if [[ "${dir_name}" == "imgs" ]]; then
                 continue
             fi
-            
+
             # 检查是否是子模块目录（以数字开头）
             if [[ "${dir_name}" =~ ^[0-9] ]]; then
                 local sub_relative_path="${relative_path}/${dir_name}"
                 local source_submodule="${ROOT_DIR}/${sub_relative_path}"
-                
+
                 # 如果源子模块不存在，删除 docs 中的对应目录
                 if [[ ! -d "${source_submodule}" ]]; then
                     rm -rf "${item}"

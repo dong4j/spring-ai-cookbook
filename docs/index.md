@@ -3,18 +3,18 @@ layout: home
 
 hero:
   name: Spring AI Cookbook
-  text: 
+  text:
   tagline: 从入门到精通，全面掌握 Spring AI 开发
   image:
     src: /spring-ai-integration-diagram-3.svg
     alt: Spring AI Cookbook
   actions:
     - theme: brand
+      text: 🔥 项目简介
+      link: /0.spring-ai-introduction/
+    - theme: alt
       text: 🚀 快速开始
       link: /1.spring-ai-started/
-    - theme: alt
-      text: 📖 查看文档
-      link: /2.spring-ai-chat-client/
     - theme: alt
       text: ⭐ GitHub
       link: https://github.com/dong4j/spring-ai-cookbook
@@ -145,13 +145,25 @@ mvn spring-boot:run
   </a>
 </div>
 
-## 💡 为什么选择 Spring AI Cookbook？
+## 👤 关于作者
 
-- ✅ **循序渐进** - 从基础到高级，系统化的学习路径
-- ✅ **实战导向** - 每个模块都包含可运行的完整示例
-- ✅ **持续更新** - 紧跟 Spring AI 最新版本和最佳实践
-- ✅ **中文友好** - 完整的中文文档和注释
-- ✅ **开源免费** - MIT 许可证，完全开源
+<div class="author-links">
+  <div class="author-section">
+    <h3>个人站点</h3>
+    <ul>
+      <li><a href="https://blog.dong4j.site" target="_blank">📝 博客</a></li>
+      <li><a href="https://home.dong4j.site" target="_blank">🏠 主页</a></li>
+    </ul>
+  </div>
+
+  <div class="author-section">
+    <h3>个人项目</h3>
+    <ul>
+      <li><a href="https://plugins.jetbrains.com/plugin/12192-markdown-image-kit" target="_blank">🖼️ MIK 插件</a> - Markdown Image Kit</li>
+      <li><a href="https://plugins.jetbrains.com/plugin/28835-ai-javadoc" target="_blank">🤖 AI Javadoc 插件</a> - AI Javadoc Generator</li>
+    </ul>
+  </div>
+</div>
 
 </div>
 
@@ -289,12 +301,59 @@ mvn spring-boot:run
   line-height: 1.5;
 }
 
+.author-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.author-section {
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.author-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+}
+
+.author-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.author-section li {
+  margin: 0.75rem 0;
+}
+
+.author-section a {
+  color: var(--vp-c-brand);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: inline-block;
+}
+
+.author-section a:hover {
+  color: var(--vp-c-brand-light);
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .stats-grid {
     grid-template-columns: 1fr;
   }
   
   .resources-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .author-links {
     grid-template-columns: 1fr;
   }
 }
