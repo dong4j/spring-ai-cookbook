@@ -65,7 +65,7 @@ process_module() {
         if [[ "${relative_path}" != "0.spring-ai-introduction" ]]; then
             # 生成 GitHub 代码链接
             local github_url="https://github.com/dong4j/spring-ai-cookbook/tree/main/${relative_path}"
-            
+
             # 检查文件末尾是否已经有代码链接标记
             if grep -q "<!-- 代码链接 -->" "${target_file}" 2>/dev/null; then
                 # 如果已有代码链接，删除从 "## 📦 代码示例" 到文件末尾的所有内容
@@ -74,7 +74,7 @@ process_module() {
                 sed '/^## 📦 代码示例$/,$d' "${target_file}" > "${temp_file}" 2>/dev/null
                 mv "${temp_file}" "${target_file}"
             fi
-            
+
             # 在文件末尾添加代码链接
             {
                 echo ""
@@ -88,7 +88,7 @@ process_module() {
                 echo ""
                 echo "<!-- 代码链接 -->"
             } >> "${target_file}"
-            
+
             echo -e "  ${BLUE}→${NC} 已添加/更新代码链接"
         fi
 
@@ -279,9 +279,4 @@ fi
 if [[ ${SKIPPED_COUNT} -gt 0 ]]; then
     echo -e "已跳过: ${YELLOW}${SKIPPED_COUNT}${NC} 个模块（无 README.md）"
 fi
-echo ""
-echo -e "${YELLOW}提示:${NC}"
-echo -e "  - 运行 ${BLUE}npm run dev${NC} 启动开发服务器"
-echo -e "  - 运行 ${BLUE}npm run build${NC} 构建文档"
-echo -e "  - 运行 ${BLUE}npm run sync${NC} 重新同步文档"
-echo ""
+
