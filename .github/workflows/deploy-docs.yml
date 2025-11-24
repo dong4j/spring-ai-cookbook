@@ -28,7 +28,7 @@ jobs:
     # 注意：如果要修改触发关键词，只需要修改下面 '[deploy-docs]' 这个字符串即可
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-docs]'))
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '@dd'))
 
     steps:
       - name: Checkout code
