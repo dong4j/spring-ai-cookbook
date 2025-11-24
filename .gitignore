@@ -39,3 +39,25 @@ docs/.vitepress/cache/
 *.log
 sensitive-data.md
 private.md
+
+# docs 中通过脚本生成的目录不放入 git 管理, 由 github action 自动生成并部署
+docs/1.spring-ai-started/
+docs/2.spring-ai-chat-client/
+docs/3.spring-ai-prompts/
+docs/4.spring-ai-structured/
+docs/5.spring-ai-multimodality/
+docs/6.spring-ai-model/
+docs/7.spring-ai-model-chat/
+docs/8.spring-ai-model-embedding/
+docs/9.spring-ai-model-image/
+docs/10.spring-ai-model-audio/
+docs/11.spring-ai-model-moderation/
+docs/12.spring-ai-model-memory/
+docs/13.spring-ai-model-tool-calling/
+docs/14.spring-ai-mcp/
+docs/15.spring-ai-rag/
+docs/16.spring-ai-model-evaluation/
+docs/17.spring-ai-vector-database/
+docs/18.spring-ai-observability/
+docs/19.spring-ai-docker/
+docs/20.spring-ai-testcontainer/
