@@ -194,6 +194,17 @@ function generateSidebar() {
     }
   }
 
+  // 在最后添加"关于"菜单
+  sidebar['/'].push({
+                      text: '关于',
+                      items: [
+                        {
+                          text: '关于这个项目',
+                          link: '/about'
+                        }
+                      ]
+                    })
+
   return sidebar
 }
 
