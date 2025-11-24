@@ -729,7 +729,7 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 2. **变更的文件是任意位置的 README.md**：
     - 包括项目根目录和所有子模块的 `README.md` 文件
     - **注意**：修改 workflow 配置文件、`docs/about.md`、或其他文档文件**不会**触发部署
-3. **提交信息中包含 `[deploy-docs]` 关键词**
+3. **提交信息中包含 `@dd` 关键词**
 
 > [!重要] 触发条件
 > 只有**同时满足**以上三个条件，workflow 才会被触发并执行部署。其他情况都会被忽略。
@@ -741,50 +741,50 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 ```bash [bash]
 # 场景 1：修改项目根目录的 README.md
 git add README.md
-git commit -m "更新项目说明 [deploy-docs]"
+git commit -m "更新项目说明 @dd"
 git push origin main
 
 # 场景 2：修改子模块的 README.md
 git add 1.spring-ai-started/README.md
-git commit -m "更新模块文档 [deploy-docs]"
+git commit -m "更新模块文档 @dd"
 git push origin main
 
 # 场景 3：修改了多个子模块的 README.md
 git add 1.spring-ai-started/README.md 2.spring-ai-chat-client/README.md
-git commit -m "更新多个模块文档 [deploy-docs]"
+git commit -m "更新多个模块文档 @dd"
 git push origin main
 ```
 
 **❌ 不会触发**：
 
 ```bash [bash]
-# 场景 1：提交信息缺少 [deploy-docs]
+# 场景 1：提交信息缺少 @dd
 git add README.md
-git commit -m "更新项目说明"  # ❌ 缺少 [deploy-docs]
+git commit -m "更新项目说明"  # ❌ 缺少 @dd
 git push origin main
 
 # 场景 2：修改了 workflow 配置文件
 git add .github/workflows/deploy-docs.yml
-git commit -m "更新部署配置 [deploy-docs]"  # ❌ 不是 README.md
+git commit -m "更新部署配置 @dd"  # ❌ 不是 README.md
 git push origin main
 
 # 场景 3：修改了 docs/about.md
 git add docs/about.md
-git commit -m "更新关于页面 [deploy-docs]"  # ❌ 不是 README.md
+git commit -m "更新关于页面 @dd"  # ❌ 不是 README.md
 git push origin main
 
 # 场景 4：修改了代码文件
 git add src/main/java/App.java
-git commit -m "修复bug [deploy-docs]"  # ❌ 不是 README.md
+git commit -m "修复bug @dd"  # ❌ 不是 README.md
 git push origin main
 ```
 
 ### 工作原理总结
 
-- ✅ **会触发并执行**：修改了任意位置的 `README.md` 文件 + 提交信息包含 `[deploy-docs]` + 推送到 `main`/`master` 分支
+- ✅ **会触发并执行**：修改了任意位置的 `README.md` 文件 + 提交信息包含 `@dd` + 推送到 `main`/`master` 分支
 - ❌ **会被忽略**：其他所有情况，包括：
-    - 修改了 `README.md` 但提交信息不包含 `[deploy-docs]`
-    - 修改了 workflow 配置文件（即使提交信息包含 `[deploy-docs]`）
+    - 修改了 `README.md` 但提交信息不包含 `@dd`
+    - 修改了 workflow 配置文件（即使提交信息包含 `@dd`）
     - 修改了 `docs/about.md` 或其他文档文件
     - 修改了代码文件
 - 🔧 **手动触发**：不受以上限制，随时可以通过 GitHub Actions 页面手动触发

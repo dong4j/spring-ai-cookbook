@@ -83,32 +83,32 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 2. **变更的文件是任意位置的 README.md**：
     - `**/README.md` - 任意位置的 README.md 文件（包括项目根目录和所有子模块）
     - **注意**：修改 workflow 配置文件本身不会触发部署
-3. **提交信息中包含 `[deploy-docs]` 关键词**
+3. **提交信息中包含 `@dd` 关键词**
 
 **重要**：只有**同时满足**以上三个条件，workflow 才会被触发并执行部署。其他情况都会被忽略。
 
 ### 完整流程示例
 
 ```bash [bash]
-# 场景 1：修改了项目根目录的 README.md，提交信息包含 [deploy-docs]
+# 场景 1：修改了项目根目录的 README.md，提交信息包含 @dd
 # ✅ 满足所有条件 ✅ 会触发并执行部署
 git add README.md
-git commit -m "更新项目说明 [deploy-docs]"
+git commit -m "更新项目说明 @dd"
 git push origin main
 
-# 场景 2：修改了子模块的 README.md，提交信息包含 [deploy-docs]
+# 场景 2：修改了子模块的 README.md，提交信息包含 @dd
 # ✅ 满足所有条件 ✅ 会触发并执行部署
 git add 1.spring-ai-started/README.md
-git commit -m "更新模块文档 [deploy-docs]"
+git commit -m "更新模块文档 @dd"
 git push origin main
 
-# 场景 3：修改了 workflow 配置文件，提交信息包含 [deploy-docs]
+# 场景 3：修改了 workflow 配置文件，提交信息包含 @dd
 # ❌ 不满足条件 ❌ 不会触发（因为只监控 README.md 文件）
 git add .github/workflows/deploy-docs.yml
-git commit -m "更新部署配置 [deploy-docs]"
+git commit -m "更新部署配置 @dd"
 git push origin main
 
-# 场景 4：修改了 README.md，但提交信息不包含 [deploy-docs]
+# 场景 4：修改了 README.md，但提交信息不包含 @dd
 # ❌ 不满足条件 ❌ 不会触发（会被忽略）
 git add README.md
 git commit -m "更新项目说明"
@@ -117,35 +117,35 @@ git push origin main
 # 场景 5：只修改了代码文件（没有 README.md 或配置文件变更）
 # ❌ 不满足条件 ❌ 不会触发（会被忽略）
 git add src/main/java/App.java
-git commit -m "修复bug [deploy-docs]"
+git commit -m "修复bug @dd"
 git push origin main
 
 # 场景 6：修改了其他文档文件（不是 README.md）
 # ❌ 不满足条件 ❌ 不会触发（会被忽略）
 git add docs/index.md
-git commit -m "更新首页 [deploy-docs]"
+git commit -m "更新首页 @dd"
 git push origin main
 ```
 
 **触发示例**：
 
 ```bash [bash]
-# ✅ 会触发并执行部署（同时满足：README.md 变更 + 提交信息包含 [deploy-docs]）
-git commit -m "更新 README [deploy-docs]"
-git commit -m "[deploy-docs] 修复文档错误"
-git commit -m "docs: 更新 README.md [deploy-docs]"
+# ✅ 会触发并执行部署（同时满足：README.md 变更 + 提交信息包含 @dd）
+git commit -m "更新 README @dd"
+git commit -m "@dd 修复文档错误"
+git commit -m "docs: 更新 README.md @dd"
 
-# ❌ 不会触发（缺少 [deploy-docs] 或不是 README.md/配置文件变更）
-git commit -m "更新 README"  # 缺少 [deploy-docs]
-git commit -m "修复代码bug [deploy-docs]"  # 不是 README.md 或配置文件变更
+# ❌ 不会触发（缺少 @dd 或不是 README.md/配置文件变更）
+git commit -m "更新 README"  # 缺少 @dd
+git commit -m "修复代码bug @dd"  # 不是 README.md 或配置文件变更
 ```
 
 **工作原理总结**：
 
-- ✅ **会触发并执行**：修改了 README.md 文件 + 提交信息包含 `[deploy-docs]`
+- ✅ **会触发并执行**：修改了 README.md 文件 + 提交信息包含 `@dd`
 - ❌ **会被忽略**：其他所有情况，包括：
-    - 修改了 README.md 但提交信息不包含 `[deploy-docs]`
-    - 修改了 workflow 配置文件（即使提交信息包含 `[deploy-docs]`）
+    - 修改了 README.md 但提交信息不包含 `@dd`
+    - 修改了 workflow 配置文件（即使提交信息包含 `@dd`）
     - 修改了其他文件
 - 🔧 **手动触发**：不受以上限制，随时可以通过 GitHub Actions 页面手动触发
 
