@@ -20,6 +20,9 @@ buildNumber.properties
 .classpath
 .project
 
+# AI
+.cursorrules
+
 # OS
 .DS_Store
 Thumbs.db
@@ -39,6 +42,7 @@ docs/.vitepress/cache/
 *.log
 sensitive-data.md
 private.md
+*.mdx
 
 # docs 中通过脚本生成的目录不放入 git 管理, 由 github action 自动生成并部署
 docs/1.spring-ai-started/

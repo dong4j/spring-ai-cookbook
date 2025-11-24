@@ -1,5 +1,73 @@
 # 快速搭建 Spring AI 项目
 
+## 最小化 Chat 应用
+
+### 1. 创建 Spring Boot 项目
+
+```bash [bash]
+curl https://start.spring.io/starter.zip \
+  -d dependencies=spring-ai-openai \
+  -d bootVersion=3.5.8 \
+  -d javaVersion=17 \
+  -d type=maven-project \
+  -o spring-ai-demo.zip
+```
+
+### 2. 修改启动类
+
+```java [java]
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
+
+@EnableAutoConfiguration
+public class StartedApplication {
+
+    public static void main(String[] args) {
+        // 设置必要的参数(这里使用通义千问的 openai api)
+        System.setProperty("spring.ai.openai.api-key", System.getenv("QIANWEN_API_KEY"));
+        System.setProperty("spring.ai.openai.base-url", "https://dashscope.aliyuncs.com/compatible-mode");
+        // 需使用非思考模型
+        System.setProperty("spring.ai.openai.chat.options.model", "qwen2.5-14b-instruct");
+
+        SpringApplication app = new SpringApplication(StartedApplication.class);
+        app.setWebApplicationType(WebApplicationType.NONE);
+        ConfigurableApplicationContext ctx = app.run(args);
+
+        // spring-ai-starter-model-openai 自动注入了 OpenAiChatModel
+        OpenAiChatModel chatModel = ctx.getBean(OpenAiChatModel.class);
+        ChatClient client = ChatClient.create(chatModel);
+
+        String reply = client.prompt("我说 ping, 你说 pong")
+            .call()
+            .content();
+
+        System.out.println("AI 回复: " + reply);
+
+        // 关闭应用上下文
+        ctx.close();
+    }
+}
+
+```
+
+### 3. 启动测试
+
+::: code-group
+
+```bash [bash]
+./mvnw spring-boot:run
+```
+
+```
+AI 回复: pong! 😊 你想玩别的吗？
+```
+
+:::
+
 ---
 
 ### 参考文档
