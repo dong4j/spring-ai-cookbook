@@ -11,10 +11,10 @@ hero:
   actions:
     - theme: brand
       text: 🚀 快速开始
-      link: /0.spring-ai-introduction/
+      link: /guide/
     - theme: alt
       text: 🔥 关于
-      link: about
+      link: /about/
     - theme: alt
       text: ⭐ GitHub
       link: https://github.com/dong4j/spring-ai-cookbook

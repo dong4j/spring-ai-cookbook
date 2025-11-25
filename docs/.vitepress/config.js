@@ -115,7 +115,8 @@ function categorizeModules(modules) {
 
     const num = parseInt(moduleNum)
 
-    // 跳过 num === 0 的模块（0.spring-ai-introduction），因为它会单独处理
+    // 跳过 num === 0 的模块（如果存在），因为它会单独处理
+    // 注意：guide 等目录不是以数字开头的，不会出现在模块列表中
     if (num === 0) {
       continue
     }
@@ -143,17 +144,17 @@ function categorizeModules(modules) {
 }
 
 /**
- * 获取 0.spring-ai-introduction 模块信息
+ * 获取 guide 模块信息
  */
-function getIntroductionModule() {
-  const introPath = path.join(docsDir, '0.spring-ai-introduction')
+function getGuideModule() {
+  const introPath = path.join(docsDir, 'guide')
   const indexPath = path.join(introPath, 'index.md')
 
   if (fs.existsSync(indexPath)) {
     const displayName = getModuleDisplayName(introPath)
     return {
       text: displayName,
-      link: '/0.spring-ai-introduction/'
+      link: '/guide/'
     }
   }
   return null
@@ -173,7 +174,7 @@ function generateSidebar() {
   const categoryOrder = ['简介', '入门', '核心功能', 'Model API', '高级功能', '部署与测试']
 
   // 单独处理"简介"分类
-  const introModule = getIntroductionModule()
+  const introModule = getGuideModule()
   if (introModule) {
     sidebar['/'].push({
                         text: '简介',
@@ -201,7 +202,7 @@ function generateSidebar() {
                       items: [
                         {
                           text: '关于这个项目',
-                          link: '/about'
+                          link: '/about/'
                         }
                       ]
                     })
@@ -254,7 +255,7 @@ export default defineConfig(
       },
 
       title: 'Spring AI Cookbook',
-      description: 'Spring AI 教程文档',
+      description: 'Spring AI Cookbook',
       base: '/',
       lang: 'zh-CN',
 

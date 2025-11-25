@@ -514,13 +514,13 @@ public class ChatController {
 **Markdown 源代码**：
 
 ```markdown
-[[0.spring-ai-introduction/index|Spring AI 简介]]
+  [[guide/index|Spring AI 简介]]
 [[1.spring-ai-started/index|快速开始]]
 ```
 
 **渲染效果**：
 
-[[0.spring-ai-introduction/index|Spring AI 简介]]
+[[guide/index|Spring AI 简介]]
 
 [[1.spring-ai-started/index|快速开始]]
 
@@ -728,7 +728,7 @@ Workflow 默认配置为**仅手动触发**，不会在每次提交时自动执�
 1. **推送到 `main` 或 `master` 分支**
 2. **变更的文件是任意位置的 README.md**：
     - 包括项目根目录和所有子模块的 `README.md` 文件
-    - **注意**：修改 workflow 配置文件、`docs/about.md`、或其他文档文件**不会**触发部署
+    - **注意**：修改 workflow 配置文件、`docs/about/index.md`、或其他文档文件**不会**触发部署
 3. **提交信息中包含 `@dd` 关键词**
 
 > [!重要] 触发条件
@@ -768,8 +768,8 @@ git add .github/workflows/deploy-docs.yml
 git commit -m "更新部署配置 @dd"  # ❌ 不是 README.md
 git push origin main
 
-# 场景 3：修改了 docs/about.md
-git add docs/about.md
+# 场景 3：修改了 docs/about/index.md
+git add docs/about/index.md
 git commit -m "更新关于页面 @dd"  # ❌ 不是 README.md
 git push origin main
 
@@ -785,7 +785,7 @@ git push origin main
 - ❌ **会被忽略**：其他所有情况，包括：
     - 修改了 `README.md` 但提交信息不包含 `@dd`
     - 修改了 workflow 配置文件（即使提交信息包含 `@dd`）
-    - 修改了 `docs/about.md` 或其他文档文件
+    - 修改了 `docs/about/index.md` 或其他文档文件
     - 修改了代码文件
 - 🔧 **手动触发**：不受以上限制，随时可以通过 GitHub Actions 页面手动触发
 
@@ -853,7 +853,6 @@ const members = [
 </script>
 
 <VPTeamMembers size="small" :members="members" />
-
 
 ## 💬 联系我们
 
