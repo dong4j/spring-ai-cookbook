@@ -6,7 +6,7 @@ hero:
   text:
   tagline: 从入门到精通，全面掌握 Spring AI 开发
   image:
-    src: /spring-ai-integration-diagram-3.svg
+    src: /spring-ai-integration.svg
     alt: Spring AI Cookbook
   actions:
     - theme: brand
