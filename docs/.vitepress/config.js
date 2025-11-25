@@ -381,6 +381,8 @@ export default defineConfig(
 
       // markdown配置
       markdown: {
+        // 开启代码行号显示
+        lineNumbers: true,
         image: {
           // 开启图片懒加载
           lazyLoading: true

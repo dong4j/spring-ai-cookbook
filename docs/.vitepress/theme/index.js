@@ -24,12 +24,15 @@ import "nprogress-v2/dist/index.css"; // 进度条样式
 import {initComponent} from 'vitepress-plugin-legend/component'
 import 'vitepress-plugin-legend/dist/index.css'
 
+import codeblocksFold from 'vitepress-plugin-codeblocks-fold';
+import 'vitepress-plugin-codeblocks-fold/style/index.css';
+
 import ArticleMetadata from "./components/ArticleMetadata.vue"
 import BackToTop from "./components/BackToTop.vue"
 
 import Footer from "./components/Footer.vue";
 import giscusTalk from 'vitepress-plugin-comment-with-giscus';
-import { fetchBusuanzi } from './utils/functions'
+import {fetchBusuanzi} from './utils/functions'
 
 import './custom.css'
 
@@ -51,6 +54,9 @@ export const Theme = {
 
     // Get frontmatter and route
     const {frontmatter} = useData();
+
+    // 代码折叠
+    codeblocksFold({route, frontmatter}, true, 300);
 
     // giscus配置
     giscusTalk({
@@ -118,10 +124,10 @@ export const Theme = {
 
           // 路由切换后重新加载 busuanzi 统计数据
           setTimeout(() => {
-            fetchBusuanzi({ 
-              updatePagePv: true, 
-              updateSiteStats: true 
-            })
+            fetchBusuanzi({
+                            updatePagePv: true,
+                            updateSiteStats: true
+                          })
           }, 300)
         }
       };

@@ -22,6 +22,7 @@
     "nprogress-v2": "^1.1.10",
     "vitepress": "^1.6.3",
     "vitepress-markdown-timeline": "^1.2.2",
+    "vitepress-plugin-codeblocks-fold": "^1.2.35",
     "vitepress-plugin-group-icons": "^1.6.5",
     "vitepress-plugin-legend": "^1.1.0"
   },

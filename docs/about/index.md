@@ -572,7 +572,7 @@ public class ChatController {
 
 ---
 
-```bash{24-44} [bash]
+```shell{24-44} [bash]
 .
 ├── 1.spring-ai-started
 ├── 2.spring-ai-chat-client
@@ -596,28 +596,28 @@ public class ChatController {
 ├── 19.spring-ai-docker
 ├── 20.spring-ai-testcontainer
 └── docs
-    ├── 1.spring-ai-started
-    ├── 2.spring-ai-chat-client
-    ├── 3.spring-ai-prompts
-    ├── 4.spring-ai-structured
-    ├── 5.spring-ai-multimodality
-    ├── 6.spring-ai-model
-    ├── 7.spring-ai-model-chat
-    │   └── 7.1.spring-ai-model-chat-openai
-    ├── 8.spring-ai-model-embedding
-    ├── 9.spring-ai-model-image
-    ├── 10.spring-ai-model-audio
-    ├── 11.spring-ai-model-moderation
-    ├── 12.spring-ai-model-memory
-    ├── 13.spring-ai-model-tool-calling
-    ├── 14.spring-ai-mcp
-    ├── 15.spring-ai-rag
-    ├── 16.spring-ai-model-evaluation
-    ├── 17.spring-ai-vector-database
-    ├── 18.spring-ai-observability
-    ├── 19.spring-ai-docker
-    ├── 20.spring-ai-testcontainer
-    ├── about
+    ├── 1.spring-ai-started                 
+    ├── 2.spring-ai-chat-client             
+    ├── 3.spring-ai-prompts                 
+    ├── 4.spring-ai-structured              
+    ├── 5.spring-ai-multimodality           
+    ├── 6.spring-ai-model                   
+    ├── 7.spring-ai-model-chat                      
+    │   └── 7.1.spring-ai-model-chat-openai 
+    ├── 8.spring-ai-model-embedding         
+    ├── 9.spring-ai-model-image             
+    ├── 10.spring-ai-model-audio            
+    ├── 11.spring-ai-model-moderation       
+    ├── 12.spring-ai-model-memory           
+    ├── 13.spring-ai-model-tool-calling     
+    ├── 14.spring-ai-mcp                    
+    ├── 15.spring-ai-rag                    
+    ├── 16.spring-ai-model-evaluation       
+    ├── 17.spring-ai-vector-database        
+    ├── 18.spring-ai-observability          
+    ├── 19.spring-ai-docker                 
+    ├── 20.spring-ai-testcontainer          
+    ├── about                               
     ├── action
     ├── guide
     └── public

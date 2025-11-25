@@ -19,56 +19,37 @@ Spring AI 项目受到了 Python 生态中 LangChain 和 LlamaIndex 等优秀项
 ::: timeline 2023-11-22
 
 - **Spring AI 项目启动**
-
 - Spring 官方团队宣布启动 Spring AI 项目
-
 - 项目初始概念和设计理念确定
-
-:::
+  :::
 
 ::: timeline 2024-05-01
 
 - **首个 Milestone 版本发布**
-
 - Spring AI 发布首个 Milestone 版本
-
 - 支持 OpenAI、Azure OpenAI 等基础模型集成
-
 - 提供 Chat、Embedding 等核心 API
-
-:::
+  :::
 
 ::: timeline 2024-11-14
 
 - **Spring AI 1.0.0 GA 正式发布**
-
 - 首个稳定版本发布，标志着框架的成熟
-
 - 支持 20+ 种 AI 模型提供商
-
 - 支持 14+ 种向量数据库
-
 - 完整的 RAG、Tool Calling、Chat Memory 等功能
-
-:::
+  :::
 
 ::: timeline 2025-05-20
 
 - **Spring AI 1.1.0 GA 发布**
-
 - 支持 Model Context Protocol（MCP）集成
-
 - 新增 Prompt Caching（提示缓存）功能
-
 - 支持 Reasoning / "Thinking" Mode（推理模式）
-
 - 增强的 RAG 功能和向量存储支持
-
 - 改进的工具调用和 Chat Memory 功能
-
 - 增强的安全性和可观测性
-
-:::
+  :::
 
 ## 为什么选择 Spring AI
 
@@ -323,6 +304,36 @@ Spring AI 作为一个通用的 AI 集成框架，主要关注于提供统一的
 2. 配置 Spring AI 使用代理端点
 3. 按照项目文档获取访问凭证
 
+#### 使用 CC Switch 管理配置（推荐）
+
+[CC Switch](https://github.com/farion1231/cc-switch) 是一个跨平台桌面应用，专门用于管理 Claude Code、Codex 和 Gemini CLI 的配置。如果你同时使用多个 AI 客户端，CC Switch 可以帮你统一管理配置，提升使用体验。
+
+**主要功能**：
+
+- ✅ **提供者管理**：统一管理多个 AI 服务提供商的配置（Claude、Codex、Gemini 等）
+- ✅ **MCP 服务器管理**：可视化管理 MCP（Model Context Protocol）服务器配置
+- ✅ **Prompt Presets**：创建和管理系统提示词预设，支持 Markdown 编辑和实时预览
+- ✅ **配置同步**：支持云同步（Dropbox、OneDrive、iCloud 等），实现多设备配置同步
+- ✅ **快速切换**：一键切换不同的 AI 提供商和配置
+
+**与 claude-code-router 配合使用**：
+
+使用 CC Switch 可以更方便地管理 Anthropic 相关的配置：
+
+1. **统一配置管理**：将 claude-code-router 的配置通过 CC Switch 统一管理
+2. **快速切换**：在不同代理端点之间快速切换，无需手动编辑配置文件
+3. **配置备份**：自动备份配置，防止配置丢失
+4. **多环境支持**：为开发、测试、生产环境配置不同的代理设置
+
+**项目链接**：[CC Switch GitHub](https://github.com/farion1231/cc-switch)
+
+**支持的配置目录**：
+
+- Claude Code: `~/.claude/settings.json`
+- Codex: `~/.codex/auth.json` 和 `config.toml`
+- Gemini: `~/.gemini/.env` 和 `settings.json`
+- CC Switch 主配置: `~/.cc-switch/config.json`（SSOT - 单一数据源）
+
 ### 方案三：使用 Ollama 搭建本地环境（推荐）
 
 [Ollama](https://ollama.com/) 是一个强大的本地 AI 模型运行工具，支持在本地运行各种开源模型。更重要的是，Ollama 还提供了云端模型服务，注册账号后可以免费试用多个强大的云端模型。
@@ -353,15 +364,28 @@ Spring AI 作为一个通用的 AI 集成框架，主要关注于提供统一的
     - 下载 Ollama 客户端
     - 在本地运行开源模型（完全免费，无需 API Key）
 
+### 方案四：使用 One API + Free API 组合
+
+[One API](https://github.com/songquanpeng/one-api) 是一个 LLM API 管理与分发系统，支持 OpenAI、Azure、Anthropic Claude、Google Gemini、DeepSeek 等 20+ 种主流模型，提供统一的 API 适配和密钥管理功能。结合 [Free API](https://llm-red-team.github.io/free-api/) 提供的免费 API 服务，可以实现对多种大模型的统一管理和免费调用。
+
+**使用方式**：
+
+1. 部署 One API（提供 Docker 镜像，一键部署）
+2. 在 One API 中配置 Free API 作为渠道
+3. 在 Spring AI 中使用 One API 的统一接口地址进行调用
+
+> ⚠️ **注意**：Free API 仅供测试使用，禁止对外提供服务或商用。
+
 ### 方案选择建议
 
-| 场景         | 推荐方案                        | 理由             |
-|------------|-----------------------------|----------------|
-| **快速上手学习** | Ollama（云端模型）                | 免费试用，模型强大，配置简单 |
-| **本地开发测试** | Ollama（本地模型）                | 完全免费，无需网络，响应快速 |
-| **生产环境**   | 国内服务商                       | 稳定可靠，有技术支持     |
-| **多模型切换**  | 硅基流动                        | 统一接口，支持多种模型    |
-| **预算有限**   | Ollama 或 claude-code-router | 免费或低成本方案       |
+| 场景         | 推荐方案                        | 理由               |
+|------------|-----------------------------|------------------|
+| **快速上手学习** | Ollama（云端模型）                | 免费试用，模型强大，配置简单   |
+| **本地开发测试** | Ollama（本地模型）                | 完全免费，无需网络，响应快速   |
+| **生产环境**   | 国内服务商                       | 稳定可靠，有技术支持       |
+| **多模型切换**  | One API + Free API          | 统一接口，支持多种模型，免费使用 |
+| **预算有限**   | Ollama 或 One API + Free API | 免费或低成本方案         |
+| **测试对比**   | One API + Free API          | 可同时测试多种模型，方便对比   |
 
 ### 下一步
 
