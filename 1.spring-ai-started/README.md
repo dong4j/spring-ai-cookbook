@@ -240,6 +240,8 @@ String reply = client.prompt()
 - [Spring AI ChatClient 官方文档](https://docs.spring.io/spring-ai/reference/api/chatclient.html)
 - [[StringTemplate|StringTemplate 引擎]]
 
+---
+
 ## 结构化输出
 
 在实际应用中，我们通常需要将 AI 模型的文本输出转换为结构化的 Java 对象，而不是直接处理字符串。Spring AI 提供了强大的结构化输出功能，可以将 AI 的响应自动映射到 POJO（Plain Old Java Object）。
