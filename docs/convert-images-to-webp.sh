@@ -160,12 +160,31 @@ update_image_links() {
   fi
 }
 
+# 函数：更新模块 docs 目录下所有 .md 文件的图片链接
+update_docs_markdown_links() {
+  local docs_dir="$1"
+  local img_filename="$2"
+  local old_ext="$3"
+
+  if [[ ! -d "$docs_dir" ]]; then
+    return
+  fi
+
+  if compgen -G "${docs_dir}/*.md" > /dev/null; then
+    for doc_file in "${docs_dir}"/*.md; do
+      [[ -f "$doc_file" ]] || continue
+      update_image_links "$doc_file" "$img_filename" "$old_ext"
+    done
+  fi
+}
+
 # 函数：处理单个模块的图片转换
 process_module_images() {
   local module_dir="$1"
   local relative_path="${module_dir#${ROOT_DIR}/}"
   local imgs_dir="${module_dir}/imgs"
   local readme_file="${module_dir}/README.md"
+  local docs_dir="${module_dir}/docs"
 
   # 跳过 docs 目录本身和隐藏目录
   if [[ "${relative_path}" == "docs"* ]] || [[ "${relative_path}" == .* ]]; then
@@ -206,13 +225,14 @@ process_module_images() {
       # 转换为 WebP
       if webp "$image_file" "$webp_file"; then
         ((CONVERTED_COUNT++))
+        local img_filename=$(basename "$image_file")
         
         # 更新 README.md 中的图片链接
         if [ -f "$readme_file" ]; then
-          # 传入完整的图片文件名（不含路径），如 "image.png"
-          local img_filename=$(basename "$image_file")
           update_image_links "$readme_file" "$img_filename" ".${ext}"
         fi
+        # 更新模块 docs 目录中的文档
+        update_docs_markdown_links "$docs_dir" "$img_filename" ".${ext}"
       fi
     done < <(find "$imgs_dir" -type f -iname "*.${ext}" -print0 2>/dev/null)
   done

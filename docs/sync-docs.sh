@@ -36,6 +36,7 @@ process_module() {
     local module_dir="$1"
     local relative_path="${module_dir#${ROOT_DIR}/}"
     local readme_file="${module_dir}/README.md"
+    local module_docs_dir="${module_dir}/docs"
 
     # 跳过 docs 目录本身和隐藏目录
     if [[ "${relative_path}" == "docs"* ]] || [[ "${relative_path}" == .* ]]; then
@@ -123,9 +124,77 @@ process_module() {
                 echo -e "  ${YELLOW}→${NC} 已删除目标目录中的 imgs/ 目录（源目录中不存在）"
             fi
         fi
+
+        # 同步 docs 目录下的文档（和 index.md 同级）
+        sync_additional_docs "${module_docs_dir}" "${target_dir}" "${relative_path}"
     else
         echo -e "${YELLOW}⚠${NC} ${relative_path}/README.md 不存在，跳过"
         ((SKIPPED_COUNT++))
+    fi
+}
+
+# 函数：删除目标目录中除 index.md 外的孤立 .md 文件
+cleanup_target_docs() {
+    local target_dir="$1"
+    local relative_path="$2"
+
+    if compgen -G "${target_dir}/*.md" > /dev/null; then
+        for target_file in "${target_dir}"/*.md; do
+            [[ ! -f "${target_file}" ]] && continue
+            local target_name
+            target_name="$(basename "${target_file}")"
+            if [[ "${target_name}" == "index.md" ]]; then
+                continue
+            fi
+            rm -f "${target_file}"
+            echo -e "  ${YELLOW}→${NC} 已删除不存在的 docs 文档: docs/${relative_path}/${target_name}"
+        done
+    fi
+}
+
+# 函数：同步模块 docs 目录下的所有 .md 文件到目标目录
+sync_additional_docs() {
+    local source_docs_dir="$1"
+    local target_dir="$2"
+    local relative_path="$3"
+
+    if [[ -d "${source_docs_dir}" ]]; then
+        local synced_docs=0
+        local has_md_files=0
+        if compgen -G "${source_docs_dir}/*.md" > /dev/null; then
+            has_md_files=1
+            for doc_file in "${source_docs_dir}"/*.md; do
+                [[ ! -f "${doc_file}" ]] && continue
+                local doc_name
+                doc_name="$(basename "${doc_file}")"
+                local target_file="${target_dir}/${doc_name}"
+                cp "${doc_file}" "${target_file}"
+                ((synced_docs++))
+                echo -e "  ${BLUE}→${NC} 已同步 docs/${doc_name} -> docs/${relative_path}/${doc_name}"
+            done
+        fi
+
+        if [[ ${has_md_files} -eq 1 ]]; then
+            # 删除目标目录中已不存在的 docs 文档
+            if compgen -G "${target_dir}/*.md" > /dev/null; then
+                for target_file in "${target_dir}"/*.md; do
+                    [[ ! -f "${target_file}" ]] && continue
+                    local target_name
+                    target_name="$(basename "${target_file}")"
+                    if [[ "${target_name}" == "index.md" ]]; then
+                        continue
+                    fi
+                    if [[ ! -f "${source_docs_dir}/${target_name}" ]]; then
+                        rm -f "${target_file}"
+                        echo -e "  ${YELLOW}→${NC} 已移除已删除的 docs 文档: docs/${relative_path}/${target_name}"
+                    fi
+                done
+            fi
+        else
+            cleanup_target_docs "${target_dir}" "${relative_path}"
+        fi
+    else
+        cleanup_target_docs "${target_dir}" "${relative_path}"
     fi
 }
 
