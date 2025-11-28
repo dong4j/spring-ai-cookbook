@@ -1,0 +1,13 @@
+spring:
+  ai:
+    mcp:
+      client:
+        stdio:
+          connections:
+            weather-server:
+              command: java
+              args:
+                - -jar
+                - -Dfile.encoding=UTF-8
+                - -Dspring.ai.mcp.server.stdio=true
+                - ../spring-ai-mcp-server/target/spring-ai-mcp-server-1.0.0-SNAPSHOT.jar

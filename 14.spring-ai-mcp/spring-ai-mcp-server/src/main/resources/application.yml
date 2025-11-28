@@ -1,0 +1,13 @@
+spring:
+  ai:
+    mcp:
+      server:
+        name: stdio-mcp-server
+        version: 1.0.0
+        type: SYNC
+        stdio: true
+  main:
+    banner-mode: off
+logging:
+  pattern:
+    console:

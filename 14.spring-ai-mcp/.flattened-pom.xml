@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>dev.dong4j.ai</groupId>
+  <artifactId>14.spring-ai-mcp</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>14.spring-ai-mcp</name>
+  <description>Spring AI MCP</description>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>dong4j</id>
+      <name>dong4j</name>
+      <email>dong4j@gmail.com</email>
+      <url>https://github.com/dong4j</url>
+      <organization>Zeka.Stack</organization>
+      <organizationUrl>https://github.com/zeka-stack</organizationUrl>
+      <timezone>+08:00</timezone>
+    </developer>
+  </developers>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>3.5.8</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -9,8 +9,14 @@
     </parent>
 
     <artifactId>14.spring-ai-mcp</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>14.spring-ai-mcp</name>
     <description>Spring AI MCP</description>
+    <modules>
+        <module>spring-ai-mcp-client</module>
+        <module>spring-ai-mcp-server</module>
+    </modules>
 
     <dependencies>
         <dependency>
