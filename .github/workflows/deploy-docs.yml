@@ -21,14 +21,20 @@ on:
       # 任意位置的 *.md 文件（包括 README.md、docs/*.md 等所有 Markdown 文件）
       - '**/*.md'
 
+  # 每日自动构建（UTC 时间每天 18:00，对应中国时间 2:00）
+  schedule:
+    - cron: '0 18 * * *'
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     # 如果是 push 触发，检查提交信息是否包含 @dd
     # 注意：如果要修改触发关键词，只需要修改下面 '@dd' 这个字符串即可
+    # schedule 触发时直接执行部署
     if: |
       github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '@dd'))
 
     steps:
@@ -86,7 +92,11 @@ jobs:
       - name: Deploy to ECS
         run: |
           echo "🚀 开始部署到 ECS 服务器..."
-          echo "部署说明: ${{ github.event.inputs.deploy_message || '手动部署文档' }}"
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            echo "部署说明: 每日自动构建部署"
+          else
+            echo "部署说明: ${{ github.event.inputs.deploy_message || '手动部署文档' }}"
+          fi
 
           rsync -avz --delete \
             --progress \
