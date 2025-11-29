@@ -6,22 +6,21 @@
 
 ### 1.1 服务架构
 
-![MCP服务架构|500](https://cdn.jsdelivr.net/gh/hackerHiJu/note-picture@main/note-picture/MCP%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84.svg)
+![](./imgs/20251129_P3vrNW.svg)
 
 ### 1.2 Agent架构
 
-![Agent架构|500](https://cdn.jsdelivr.net/gh/hackerHiJu/note-picture@main/note-picture/Agent%E6%9E%B6%E6%9E%84.svg)
+![](./imgs/20251129_5bX318.svg)
 
 ### 1.3 MCP流程调用
 
-![|500](https://cdn.jsdelivr.net/gh/hackerHiJu/note-picture@main/note-picture/MCP%E6%B5%81%E7%A8%8B%E8%B0%83%E7%94%A8.svg)
+![](./imgs/20251129_zvtyql.svg)
 
 ### 1.4 官方架构
 
 MCP就像是USB-C一样，可以让不同设备通过相同的接口连接在一起
 
-![|500](https://cdn.jsdelivr.net/gh/hackerHiJu/note-picture@main/note-picture/MCP%E6%9C%8D%E5%8A%A1-1744869631283.png)
-
+![](./imgs/20251129_uVOeDf.png)
 
 ## 2. MCP概念
 
@@ -34,26 +33,32 @@ MCP就像是USB-C一样，可以让不同设备通过相同的接口连接在一
 - Roots：客户端给服务器指定的一些地址，用来高速服务器该关注哪些资源和去哪里找这些资源
 
 ### 2.1 Tools
+
 服务器所支持的工具能力，使用提供的装饰器就可以定义对应的工具
 
 ### 2.2 Resources
+
 类似于服务端定义了一个api接口用于查询数据，可以给大模型提供上下文
 
 ### 2.3 Prompt
+
 提示词，用于在服务端定义好自己的提示词来进行复用
 
 ### 2.4 Images
+
 MCP提供的一个Image类，可以自动处理图像数据
 
 ### 2.5 Context
+
 Context 对象为您的工具和资源提供对 MCP 功能的访问权限，在服务端的工具中可以调用对应的资源数据
 
 ### 2.6 Server
+
 自定义Server提供了更加灵活的方式来组合资源、工具，包括服务启动的生命周期流程的控制
 
 ### 2.7 Sampling
-MCP为我们提供的一个在执行工具前后可以执行的一些操作，类似回调函数
 
+MCP为我们提供的一个在执行工具前后可以执行的一些操作，类似回调函数
 
 ## 3. Spring AI MCP
 
@@ -212,6 +217,7 @@ public CommandLineRunner predefinedQuestions(List<McpSyncClient> mcpSyncClients)
     };  
 }
 ```
+
 ```
 
 ### 3.4 通讯方式
@@ -300,7 +306,7 @@ webflux的依赖包是同时兼容了，sse、stdio等方式进行通信，其�
 
 ##### ToolCallbackProvider
 
-![|500](https://cdn.jsdelivr.net/gh/hackerHiJu/note-picture@main/note-picture/MCP%E6%9C%8D%E5%8A%A1-1744872737197.png)
+![](./imgs/20251129_naGufT.png)
 
 - MethodToolCallbackProvider：方法工具回调函数提供器
 - StaticToolCallbackProvider：里面包含了FunctionCallback包装了一层
@@ -319,7 +325,7 @@ public ToolCallbackProvider weatherTools(WeatherService weatherService) {
 
 通过上面的提供器最终构建的还是 **ToolCallback** 接口类型的实例对象
 
-![|500](https://cdn.jsdelivr.net/gh/hackerHiJu/note-picture@main/note-picture/MCP%E6%9C%8D%E5%8A%A1-1744873575006.png)
+![](./imgs/20251129_ij7yxF.png)
 
 - MethodToolCallback：普通@Tool标识的方法工具回调函数
 - FunctionToolCallback：函数回调工具
@@ -551,8 +557,8 @@ public static class CustomMcpSyncClientCustomizer implements McpSyncClientCustom
 ## 4. 故障排除
 
 ### 4.1 包装Request
-在有些现有的服务中可能会对http请求类进行包装缓存一层
 
+在有些现有的服务中可能会对http请求类进行包装缓存一层
 
 ## 5. 开源MCP市场
 
