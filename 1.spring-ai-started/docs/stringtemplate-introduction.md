@@ -1,4 +1,4 @@
-# StringTemplate
+# 简单了解一下 StringTemplate
 
 ## 前言
 
