@@ -3,7 +3,7 @@
 ## 概述
 什么是提示词？
 我们输入给 AI 的那段话，无论是一个问题、一个要求，还是一个详细的指令，就是我们所说的提示词。
-提示词是人类与AI高效沟通的桥梁。 提示词从最开始简单的一句话命令，逐步扩展为复杂的一项工程，我们称之为 `Prompt Engineering`，
+提示词是人类与AI高效沟通的桥梁，提示词从最开始简单的一句话命令，逐步扩展为复杂的一项工程，我们称之为 `Prompt Engineering`。
 
 ## 核心类和接口
 
@@ -80,7 +80,7 @@ public class Prompt implements ModelRequest<List<Message>> {
 提示词模板旨在促进创建结构化的提示词，
 将提示词内容定义为模板，并使用占位符进行填充，最终输出一个完整的提示词交给大模型。
 
-#### 1. PromptTemplateStringActions
+#### 5.1. PromptTemplateStringActions
 返回 `String` 类型的提示词模板渲染接口，专注于创建和渲染提示字符串，提示词接口中最基本的形式
 
 ```java
@@ -93,7 +93,7 @@ public interface PromptTemplateStringActions {
 }
 ```
 
-#### 2. PromptTemplateMessageActions
+#### 5.2. PromptTemplateMessageActions
 返回 `Message` 类型的提示词模板渲染接口，专为通过生成和操作 Message 对象来创建提示而设计
 还记得嘛？一个 `Message` 对象继承 `Content`，包含一个 `MessageType` 的 get 方法
 
@@ -111,7 +111,7 @@ public interface PromptTemplateMessageActions {
 }
 ```
 
-#### 3. PromptTemplateActions
+#### 5.3. PromptTemplateActions
 `PromptTemplateActions` 用于返回 `Prompt` 对象，从 #4. Prompt 中我们可以知道 `Prompt` 对象中含有一串 `Message` 和
 用于与大模型对话过程中可调节的一些参数对象 `ChatOptions`
 
@@ -726,7 +726,7 @@ ReAct的升级版，通过：
 
 首先，什么是上下文（Context）？它是一种能提供给 LLM 的、用于完成下一步推理或生成任务的全部**信息**集合。引用一张图来进行概括：
 
-![上下文集合](https://pic3.zhimg.com/v2-3812bc36dc1eb599bbdec581d388ee02_1440w.jpg)
+![上下文信息集合](docs/imgs/context.png)
 
 为了更好的理解，我们可以将上下文信息按照以下分类：
 
@@ -736,7 +736,7 @@ ReAct的升级版，通过：
 
 - 行动性上下文。这类上下文的核心功能是告诉模型能做什么以及做了之后的结果，为模型提供与外部世界交互的能力。它包括：Tool Definition；Tool Calls & Results / Tool Traces
 
-![上下文信息分类](https://picx.zhimg.com/v2-915e587da008d07dc35d7323070a4f39_1440w.jpg)
+![上下文信息分类](docs/imgs/context_class.png)
 
 上下文信息我们知道了，那么什么是上下文工程？
 
