@@ -35,7 +35,7 @@ public class PromptConfig {
                 .mutate()
                 .defaultOptions(
                     OpenAiChatOptions.builder()
-                        .model("qwen2.5-14b-instruct")
+                        .model("Qwen/Qwen3-8B")
                         .temperature(0.7)
                         .build())
                 .build());

@@ -4,7 +4,7 @@ spring:
 
   ai:
     openai:
-      base-url: https://api.siliconflow.cn/v1
+      base-url: https://api.siliconflow.cn
       api-key: ${SILICONFLOW_API_KEY}
 
 server:
