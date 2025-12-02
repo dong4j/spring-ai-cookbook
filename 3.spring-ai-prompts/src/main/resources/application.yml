@@ -2,3 +2,15 @@ spring:
   application:
     name: spring-ai-prompts
 
+  ai:
+    openai:
+      base-url: https://api.siliconflow.cn
+      api-key: ${SILICONFLOW_API_KEY}
+
+server:
+  port: 8080
+
+logging:
+  level:
+    dev.dong4j.ai.spring: DEBUG
+    org.springframework.ai: DEBUG
