@@ -1,5 +1,51 @@
 # 模型上下文协议(MCP)
 
+<!--
+写作思路：
+  - 这一篇是「上手体验篇」，几乎不讲概念，只让读者先跑起来。
+  - 避免解释什么是 LLM、function calling、MCP 规范，只在需要的地方用一句话浅带。
+  - 重点是：Spring AI + MCP Starter 如何配置、如何调用 MCP Server 的工具、如何写一个最小的 MCP Server。
+  - 读完后读者应该有这样的感觉：
+    “原来 MCP 就是这样被 Spring AI 调用的，我大概知道它是个『AI 可调用工具协议』。”
+
+大纲示例：
+1.	为什么先从 Spring AI 开始？
+  - MCP 很抽象，直接看规范容易劝退
+  - 用 Spring Boot + Spring AI 做一个「AI 能用的工具」最直观
+  - 本系列整体路线简单预告（用 1 图说明 8 篇）
+2.	本文目标与预备环境
+  - 目标：让 LLM 调用一个「查询系统时间」的 MCP 工具
+  - 环境：JDK、Spring Boot、Spring AI 依赖、一个简单的 LLM provider（OpenAI / 本地）
+3.	用 Spring AI 写一个最小 MCP Server
+  - 引入 spring-ai-mcp-server starter
+  - 定义一个简单的 Tool（例如 time.now）
+  - 配置 server 端口、路径，启动起来
+4.	用 Spring AI 写一个最小 MCP Client
+  - 引入 spring-ai-mcp-client starter
+  - 在 application.yml 里配置 MCP Server（比如 HTTP 或 stdio）
+  - 写一段 Java 代码：通过 MCP Client 调用 time.now
+  - 打印返回结果（证明 client-server 通了）
+5.	把 LLM 拉进来：让模型「自动决定」调用 MCP 工具
+  - 创建一个简单的 ChatClient（OpenAI / 其他）
+  - 把 MCP 工具注册成模型工具（用 Spring AI 已封装的方式）
+  - 演示用户输入一句话 → 模型自动选择工具 → 工具执行 → 返回结果
+  - Console 日志截一段：可以看到工具调用过程
+6.	小结：我现在对 MCP 的“直觉认识”
+  - MCP 看起来像「给 AI 用的 RPC + 工具发现机制」
+  - Spring AI 很大程度帮我们「挡住了协议细节」
+  - 埋一个坑：
+但在没有 Spring AI 的世界里，LLM 是怎么调用外部工具的？
+MCP 到底解决了什么老问题？
+
+
+这一篇我们只站在 Spring AI 的肩膀上，把 MCP 当成一个「可以远程调用的小工具」。
+但你可能已经有疑问：
+- 没有 MCP 之前，LLM 是怎么调用这些工具的？
+- 为什么还要搞一个新的协议？
+
+下一篇我们就从「传统 function calling 的痛点」出发，看看 MCP 是怎么被一步步“逼”出来的。
+-->
+
 ## 什么是 MCP？
 
 想象一下，你的 AI 助手就像一个智能机器人，但它本身只能"思考"，无法直接操作现实世界。MCP（Model Context Protocol，模型上下文协议）就像是为这个机器人提供的一套**标准化的"插件系统"**。
@@ -166,8 +212,8 @@ spring:
             server1:  
               command: java  
               args:  
-                - -jar  
-                - mcp-server.jar  # 你的服务端 jar 包路径
+            - -jar  
+            - mcp-server.jar  # 你的服务端 jar 包路径
 ```
 
 #### 4. 调用示例
