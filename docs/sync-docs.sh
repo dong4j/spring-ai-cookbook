@@ -31,6 +31,36 @@ SYNCED_COUNT=0
 SKIPPED_COUNT=0
 IMGS_COUNT=0
 
+# 函数：检查并添加 frontmatter（如果没有）
+add_frontmatter_if_missing() {
+    local file_path="$1"
+    
+    if [[ ! -f "${file_path}" ]]; then
+        return
+    fi
+    
+    # 检查文件开头是否有 frontmatter（以 --- 开头）
+    local first_line=$(head -n 1 "${file_path}" 2>/dev/null | tr -d '\r\n' | sed 's/^[[:space:]]*//')
+    
+    if [[ "${first_line}" != "---" ]]; then
+        # 没有 frontmatter，添加一个
+        local current_date=$(date +"%Y.%m.%d")
+        local temp_file=$(mktemp)
+        
+        # 创建新的 frontmatter 并添加原有内容
+        {
+            echo "---"
+            echo "published: ${current_date}"
+            echo "---"
+            echo ""
+            cat "${file_path}"
+        } > "${temp_file}"
+        
+        mv "${temp_file}" "${file_path}"
+        echo -e "  ${BLUE}→${NC} 已添加 frontmatter (published: ${current_date})"
+    fi
+}
+
 # 函数：处理单个模块目录
 process_module() {
     local module_dir="$1"
@@ -61,6 +91,9 @@ process_module() {
 
         # 复制 README.md 到 index.md
         cp "${readme_file}" "${target_file}"
+
+        # 检查并添加 frontmatter（如果没有）
+        add_frontmatter_if_missing "${target_file}"
 
         # 在文档末尾添加代码链接
         # 生成 GitHub 代码链接
@@ -169,6 +202,10 @@ sync_additional_docs() {
                 doc_name="$(basename "${doc_file}")"
                 local target_file="${target_dir}/${doc_name}"
                 cp "${doc_file}" "${target_file}"
+                
+                # 检查并添加 frontmatter（如果没有）
+                add_frontmatter_if_missing "${target_file}"
+                
                 ((synced_docs++))
                 echo -e "  ${BLUE}→${NC} 已同步 docs/${doc_name} -> docs/${relative_path}/${doc_name}"
             done

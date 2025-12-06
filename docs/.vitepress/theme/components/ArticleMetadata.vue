@@ -10,7 +10,43 @@ const date = computed(() => {
   const year = d.getFullYear()
   const month = String(d.getMonth() + 1).padStart(2, '0')
   const day = String(d.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  return `${year}.${month}.${day}`
+})
+
+// 格式化 published 日期
+const publishedDate = computed(() => {
+  const published = page.value.frontmatter?.published
+  if (!published) return null
+  
+  try {
+    // 支持多种格式：2025.12.06 或 2025-12-06 或 2025/12/06
+    let dateStr = published.toString().trim()
+    
+    // 统一替换分隔符为 -
+    dateStr = dateStr.replace(/[.\/]/g, '-')
+    
+    // 解析日期
+    const parts = dateStr.split('-')
+    if (parts.length === 3) {
+      const year = parts[0]
+      const month = parts[1].padStart(2, '0')
+      const day = parts[2].padStart(2, '0')
+      return `${year}.${month}.${day}`
+    }
+    
+    // 如果格式不对，尝试直接解析
+    const d = new Date(dateStr)
+    if (!isNaN(d.getTime())) {
+      const year = d.getFullYear()
+      const month = String(d.getMonth() + 1).padStart(2, '0')
+      const day = String(d.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    }
+  } catch (e) {
+    console.warn('Failed to parse published date:', published, e)
+  }
+  
+  return null
 })
 
 const wordCount = ref(0)
@@ -75,12 +111,25 @@ onMounted(() => {
 
 <template>
     <div class="article-metadata">
+        <template v-if="publishedDate">
+            <div class="meta-item">
+                <svg class="meta-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="meta-label">发表于:</span>
+                <span class="meta-value">{{ publishedDate }}</span>
+            </div>
+            <span class="meta-separator">·</span>
+        </template>
         <div class="meta-item">
             <svg class="meta-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <span class="meta-label">更新:</span>
+            <span class="meta-label">更新于:</span>
             <span class="meta-value">{{ date }}</span>
         </div>
         <span class="meta-separator">·</span>
@@ -109,7 +158,7 @@ onMounted(() => {
                 <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <span class="meta-label">阅读:</span>
+            <span class="meta-label">阅读量:</span>
             <span class="meta-value" id="busuanzi_page_pv">--</span>
             <span class="meta-unit">次</span>
         </div>

@@ -147,9 +147,10 @@ a.VPButton[href*="1.spring-ai-started"]:hover,
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
-/* 自定义滚动条 */
+/* 自定义滚动条 - 全局默认样式 */
 ::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -162,6 +163,46 @@ a.VPButton[href*="1.spring-ai-started"]:hover,
 }
 
 ::-webkit-scrollbar-thumb:hover {
+    background: var(--vp-c-brand);
+}
+
+/* 侧边栏滚动条 - 默认隐藏，需要时显示 */
+.VPSidebar {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: transparent transparent; /* Firefox: 默认透明 */
+}
+
+/* 侧边栏容器悬停或滚动时显示滚动条 */
+.VPSidebar:hover,
+.VPSidebar.scrolling {
+    scrollbar-color: var(--vp-c-divider) var(--vp-c-bg); /* Firefox */
+}
+
+/* Webkit 浏览器（Chrome, Safari, Edge）侧边栏滚动条样式 */
+.VPSidebar ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+}
+
+.VPSidebar ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.VPSidebar ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 3px;
+    transition: background 0.3s ease;
+}
+
+/* 悬停或滚动时显示滚动条 */
+.VPSidebar:hover ::-webkit-scrollbar-thumb,
+.VPSidebar.scrolling ::-webkit-scrollbar-thumb {
+    background: var(--vp-c-divider);
+}
+
+.VPSidebar:hover ::-webkit-scrollbar-thumb:hover,
+.VPSidebar.scrolling ::-webkit-scrollbar-thumb:hover {
     background: var(--vp-c-brand);
 }
 

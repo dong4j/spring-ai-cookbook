@@ -44,12 +44,69 @@ export const Theme = {
       // 为所有图片增加缩放功能
       mediumZoom('.main img', {background: 'var(--vp-c-bg)'})
     }
+    
+    // 初始化侧边栏滚动条样式
+    const initSidebarScrollbar = () => {
+      if (!inBrowser) return
+      
+      nextTick(() => {
+        const sidebar = document.querySelector('.VPSidebar')
+        if (!sidebar) return
+        
+        let scrollTimeout = null
+        
+        // 监听滚动事件，滚动时添加 scrolling 类
+        const handleScroll = () => {
+          if (scrollTimeout) {
+            clearTimeout(scrollTimeout)
+          }
+          
+          sidebar.classList.add('scrolling')
+          
+          // 滚动停止后移除 scrolling 类（但保持悬停时的显示）
+          scrollTimeout = setTimeout(() => {
+            if (!sidebar.matches(':hover')) {
+              sidebar.classList.remove('scrolling')
+            }
+          }, 300)
+        }
+        
+        // 监听鼠标离开事件
+        const handleMouseLeave = () => {
+          if (scrollTimeout) {
+            clearTimeout(scrollTimeout)
+          }
+          scrollTimeout = setTimeout(() => {
+            sidebar.classList.remove('scrolling')
+          }, 300)
+        }
+        
+        sidebar.addEventListener('scroll', handleScroll, { passive: true })
+        sidebar.addEventListener('mouseleave', handleMouseLeave)
+        
+        // 清理函数
+        return () => {
+          sidebar.removeEventListener('scroll', handleScroll)
+          sidebar.removeEventListener('mouseleave', handleMouseLeave)
+          if (scrollTimeout) {
+            clearTimeout(scrollTimeout)
+          }
+        }
+      })
+    }
+    
     onMounted(() => {
       initZoom()
+      initSidebarScrollbar()
     })
     watch(
         () => route.path,
-        () => nextTick(() => initZoom())
+        () => {
+          nextTick(() => {
+            initZoom()
+            initSidebarScrollbar()
+          })
+        }
     )
 
     // Get frontmatter and route

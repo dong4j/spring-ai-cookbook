@@ -126,6 +126,7 @@ function findModules(dir, basePath = '') {
           if (docItems.length > 0) {
             moduleInfo.items.push(...docItems)
           }
+          moduleInfo.collapsed = false
         }
 
         modules.push(moduleInfo)
@@ -317,7 +318,8 @@ function addDirectoryMenu(sidebar, menuText, dirName) {
   if (items.length > 0) {
     sidebar['/'].push({
                         text: menuText,
-                        items: items
+                        items: items,
+                        collapsed: true
                       })
   }
 }
@@ -347,7 +349,8 @@ function generateSidebar() {
     if (categorized[category] && categorized[category].length > 0) {
       sidebar['/'].push({
                           text: category,
-                          items: categorized[category]
+                          items: categorized[category],
+                          collapsed: true
                         })
     }
   }
@@ -503,7 +506,7 @@ export default defineConfig(
           text: '最后更新于',
           formatOptions: {
             forceLocale: true, // 保持默认 locale 处理（可选）
-            dateStyle: 'short',
+            dateStyle: 'full',
             timeStyle: 'medium'
           },
           transform: (timestamp) => {
