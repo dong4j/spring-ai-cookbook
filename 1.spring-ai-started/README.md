@@ -1,4 +1,10 @@
+---
+published: 2025.10.01
+---
+
 # Spring AI 特性概览
+
+## 概述
 
 在 [[guide/2.quick-start|快速开始]] 的终端示例里，我们搭建了一个最小化的 Spring Boot 应用并调用 Spring AI 返回了第一条聊天结果。
 

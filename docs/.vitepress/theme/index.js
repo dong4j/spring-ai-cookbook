@@ -29,6 +29,7 @@ import 'vitepress-plugin-codeblocks-fold/style/index.css';
 
 import ArticleMetadata from "./components/ArticleMetadata.vue"
 import BackToTop from "./components/BackToTop.vue"
+import CopyOrDownloadAsMarkdownButtons from "./components/CopyOrDownloadAsMarkdownButtons.vue"
 
 import Footer from "./components/Footer.vue";
 import giscusTalk from 'vitepress-plugin-comment-with-giscus';
@@ -151,6 +152,9 @@ export const Theme = {
     })
   },
   enhanceApp({app, router}) {
+    // 先注册插件组件，然后注册自定义组件以覆盖它
+    // 注意：后注册的组件会覆盖先注册的同名组件
+    app.component('CopyOrDownloadAsMarkdownButtons', CopyOrDownloadAsMarkdownButtons)
     app.component('ArticleMetadata', ArticleMetadata)
     initComponent(app)
     app.use(NolebaseInlineLinkPreviewPlugin)

@@ -1,3 +1,7 @@
+---
+published: 2025.10.01
+---
+
 # Spring AI Prompts Cookbook
 
 ## 概述

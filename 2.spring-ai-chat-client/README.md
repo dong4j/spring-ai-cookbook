@@ -1,6 +1,10 @@
+---
+published: 2025.10.01
+---
+
 # Chat Client API
 
----
+## 概述
 
 ## 目标
 
