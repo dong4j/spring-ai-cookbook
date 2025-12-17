@@ -63,7 +63,7 @@ System.out.println(result.movies());  // ["Forrest Gump", "Saving Private Ryan",
 ```
 
 
-> ✅ **运行效果**：程序直接拿到强类型的 `ActorsFilms` 实例，无需手动解析 JSON 字符串。
+> **运行效果**：程序直接拿到强类型的 `ActorsFilms` 实例，无需手动解析 JSON 字符串。
 
 ### 关键点分析
 
@@ -78,7 +78,7 @@ System.out.println(result.movies());  // ["Forrest Gump", "Saving Private Ryan",
 
 ---
 
-## 核心思想：用“格式契约”桥接 LLM 与程序
+## 用“格式契约”桥接 LLM 与程序
 
 `StructuredOutputConverter` 的设计灵感来自 **前后端 API 契约**：
 
@@ -94,7 +94,7 @@ System.out.println(result.movies());  // ["Forrest Gump", "Saving Private Ryan",
 | 契约 | OpenAPI/Swagger | JSON Schema / 格式指令 |
 | 解析器 | Jackson/Gson | `ObjectMapper` / `ConversionService` |
 
-### 工作流程（三步闭环）
+### 工作流程
 
 ```mermaid
 graph LR
@@ -114,7 +114,7 @@ E --> F[业务逻辑使用]
 
 ---
 
-## 深度用法：三种内置转换器详解
+## 三种内置转换器详解
 
 Spring AI 提供三种开箱即用的转换器，覆盖 90% 场景。
 
@@ -125,7 +125,7 @@ Spring AI 提供三种开箱即用的转换器，覆盖 90% 场景。
 #### 示例：带泛型的复杂结构
 
 ```java
-List<ActorsFilms> films = ChatClient.create(chatModel)
+List<ActorsFilms> films = openAiChatClient.prompt()
     .prompt()
     .user("List 3 movies each for Tom Hanks and Julia Roberts.")
     .call()
@@ -134,7 +134,7 @@ List<ActorsFilms> films = ChatClient.create(chatModel)
 
 > ⚠️ 注意：必须用 `ParameterizedTypeReference` 保留泛型信息，否则 Jackson 无法反序列化。
 
-#### 控制字段顺序（可选）
+#### 控制字段顺序
 
 通过 `@JsonPropertyOrder` 确保 JSON Schema 字段顺序一致：
 
@@ -170,7 +170,7 @@ String name = (String) result.get("name"); // "Alice"
 适用于：模型只需返回一维列表（如关键词、选项、ID 列表）。
 
 ```java
-List<String> flavors = ChatClient.create(chatModel)
+List<String> flavors = openAiChatClient.prompt()
     .prompt()
     .user("List five ice cream flavors")
     .call()
@@ -184,16 +184,16 @@ List<String> flavors = ChatClient.create(chatModel)
 
 ---
 
-## 利用原生结构化输出能力（高级）
+## 原生结构化输出能力
 
-随着越来越多 AI 模型（如 OpenAI、Azure OpenAI、Mistral）**原生支持结构化输出**，你可以通过启用 `AdvisorParams.ENABLE_NATIVE_STRUCTURED_OUTPUT` 顾问参数，让 Spring AI 自动使用模型的原生能力，而不是依赖提示词引导。
+随着越来越多 AI 模型（如 OpenAI、Azure OpenAI、Mistral）**原生支持结构化输出**，你可以通过启用 `AdvisorParams.ENABLE_NATIVE_STRUCTURED_OUTPUT` 参数，让 Spring AI 自动使用模型的原生能力，而不是依赖提示词引导。
 
 ### 启用方式
 
 #### 方式一：单次调用启用
 
 ```java
-ActorFilms actorFilms = chatClient.prompt()
+ActorFilms actorFilms = openAiChatClient.prompt()
     .advisors(AdvisorParams.ENABLE_NATIVE_STRUCTURED_OUTPUT)
     .user("Generate the filmography for a random actor.")
     .call()
@@ -203,12 +203,12 @@ ActorFilms actorFilms = chatClient.prompt()
 #### 方式二：全局启用（所有调用生效）
 
 ```java
-ChatClient chatClient = ChatClient.builder(chatModel)
+ChatClient openAiChatClient = ChatClient.builder(chatModel)
     .defaultAdvisors(AdvisorParams.ENABLE_NATIVE_STRUCTURED_OUTPUT)
     .build();
 ```
 
-> ✅ **优势**：  
+> **优势**：  
 > 原生结构化输出由模型内部强制执行，**可靠性远高于仅靠提示词约束**，尤其适合生产环境。
 
 ### 重要限制：并非所有结构都支持
@@ -224,12 +224,12 @@ ChatClient chatClient = ChatClient.builder(chatModel)
 
 在这种情况下，即使启用了原生结构化输出，模型也可能失败或回退到自由文本。
 
-✅ **解决方案**：  
+**解决方案**：  
 此时应**关闭原生模式**，改用 Spring AI 默认的结构化输出转换器（基于提示词 + 后处理），它能通过更灵活的格式指令引导模型生成有效 JSON。
 
 ```java
 // 不启用原生模式，依赖默认转换器
-List<ActorFilms> result = chatClient.prompt()
+List<ActorFilms> result = openAiChatClient.prompt()
     .user("List filmographies for Tom Hanks and Julia Roberts.")
     .call()
     .entity(new ParameterizedTypeReference<List<ActorFilms>>() {});
@@ -249,7 +249,7 @@ List<ActorFilms> result = chatClient.prompt()
 - 返回带解释的文本（如：“好的，这是你要的 JSON：{...}”）
 - 生成语法错误的 JSON
 
-✅ **应对策略**：
+**应对策略**：
 - 使用支持 **原生 JSON 模式** 的模型（见下表）
 - 添加后置验证（如 try-catch + 重试）
 
@@ -287,10 +287,7 @@ List<ActorFilms> result = chatClient.prompt()
 
 ---
 
-## 资源导航
+## 引用
 
 - [官方文档：Structured Output Converter](https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html)
-- [示例代码仓库](https://github.com/spring-projects/spring-ai/tree/main/spring-ai-core/src/test/java/org/springframework/ai/parser)
-- 相关测试类：`BeanOutputConverterTests.java`, `OpenAiChatModelIT.java`
-
-> 下一篇预告：《如何用 OpenAI Structured Outputs + JSON Schema 实现 100% 可靠的结构化输出》
+- [Structured model outputs | OpenAI API](https://platform.openai.com/docs/guides/structured-outputs)
